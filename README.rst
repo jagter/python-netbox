@@ -6,6 +6,10 @@ python-netbox is a client for the Netbox (https://github.com/digitalocean/netbox
 It's based on the APIv2 which is released since version 2.0.0. For now only the get/create/delete methods
 are implemented. The possibility to modify items will be implementend soon.
 
+The full documentation can be found on ReadtheDocs_.
+
+.. _ReadtheDocs: http://python-netbox.readthedocs.io/en/latest/#
+
 -----------------
 Installation
 -----------------
