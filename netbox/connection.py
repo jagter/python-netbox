@@ -3,7 +3,8 @@ import socket
 
 class NetboxConnection(object):
 
-    def __init__(self, ssl_verify=False, use_ssl=True, host=None, limit=1000, auth_token=None, port=80):
+    def __init__(self, ssl_verify=False, use_ssl=True, host=None, limit=1000, auth_token=None, auth=None,
+                 port=80):
         self.use_ssl = use_ssl
         self.host = host
         self.limit = limit
@@ -17,13 +18,19 @@ class NetboxConnection(object):
         self.session = requests.Session()
         self.session.verify = ssl_verify
 
-        if auth_token is not None:
+        if auth:
+            self.session.auth = auth
+
+        if auth_token:
             token = 'Token {}'.format(self.auth_token)
             self.session.headers.update({'Authorization': token})
             self.session.headers.update({'Accept': 'application/json'})
             self.session.headers.update({'Content-Type': 'application/json'})
-        else:
-            raise ValueError('Please enter authorization token when using api version 2')
+
+        if auth and auth_token:
+            raise ValueError('Only one authentication method is possible')
+        elif auth is None and auth_token is None:
+            raise ValueError('Please use auth or auth_token for authentication')
 
     def __request(self, method, params=None, body=None):
         url = self.base_url + str(params)
