@@ -11,12 +11,17 @@ def readme():
         return f.read()
 
 setup(name='python-netbox',
-      version='1.0',
-      description='Python NetBox',
+      version='0.0.1',
+      description='Python NetBox Client',
       long_description=readme(),
       author='Thomas van der Jagt',
       author_email='thomas@tjrb.nl',
       url='https://github.com/jagter/python-netbox',
       packages=find_packages(),
       install_requires=['ipaddress', 'requests']
+      classifiers =
+        Programming Language :: Python :: 3
+        Intended Audience :: System Administrators
+        License :: OSI Approved :: Apache Software License
+        Programming Language :: Python :: 3.6
      )
