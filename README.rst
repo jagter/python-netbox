@@ -1,8 +1,10 @@
 ============================
-Python Netbox
+Python Netbox Client
 ============================
 
-
+python-netbox is a client for the Netbox (https://github.com/digitalocean/netbox) API.
+It's based on the APIv2 which is released since version 2.0.0. For now only the get/create/delete methods
+are implemented. The possibility to modify items will be implementend soon.
 
 -----------------
 Installation
@@ -10,7 +12,7 @@ Installation
 
 To get the latest version from Github:
 
-   $ pip install -e git+git://github.com/jagter/python-netbox.git#egg=python-netbox
+   $ pip install -e git+https://github.com/jagter/python-netbox.git#egg=python-netbox
 
 -----------------
 Usage
