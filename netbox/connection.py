@@ -1,5 +1,7 @@
 import requests
 import socket
+from netbox import exceptions
+
 
 class NetboxConnection(object):
 
@@ -10,6 +12,7 @@ class NetboxConnection(object):
         self.limit = limit
         self.auth_token = auth_token
         self.port = port
+        self.auth = auth
 
         if use_ssl:
             self.port = 443
@@ -28,7 +31,7 @@ class NetboxConnection(object):
             self.session.headers.update({'Content-Type': 'application/json'})
 
         if auth and auth_token:
-            raise ValueError('Only one authentication method is possible')
+            raise ValueError('Only one authentication method is possible. Please use auth or auth_token')
         elif auth is None and auth_token is None:
             raise ValueError('Please use auth or auth_token for authentication')
 
@@ -69,9 +72,13 @@ class NetboxConnection(object):
             return list
 
     def put(self, params):
+        if self.auth:
+            raise exceptions.AuthException('With basic auth the API is not writable')
         return self.__request('PUT', params)
 
     def post(self, params, required_fields, **kwargs):
+        if self.auth:
+            raise exceptions.AuthException('With basic auth the API is not writable')
         body_data = {}
 
         for k, v in required_fields.items():
@@ -89,6 +96,8 @@ class NetboxConnection(object):
             return resp_ok, resp_data['name'][0]
 
     def delete(self, params, del_id):
+        if self.auth:
+            raise exceptions.AuthException('With basic authentication the API is not writable')
         del_str = '{}{}'.format(params, del_id)
         resp_ok, resp_status, resp_data = self.__request('DELETE', del_str)
 
