@@ -57,7 +57,7 @@ class Dcim(object):
         """Returns the available racks"""
         return self.netbox_con.get('/dcim/racks/')
 
-    def create_rack(self, name, site, **kwargs):
+    def create_rack(self, name, site_name, **kwargs):
         """Create new rack
 
         :param name: Name of the rack
@@ -65,7 +65,8 @@ class Dcim(object):
         :param kwargs: Optional arguments
         :return: bool True if successful otherwise create exception
         """
-        required_fields = {"name": name, "site": site}
+        site_id = self.__convert_site(site_name)
+        required_fields = {"name": name, "site": site_id}
         resp_ok, resp_data = self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
 
         if resp_ok:
@@ -405,3 +406,4 @@ class Dcim(object):
             if item['name'] == platform_name:
                 return item['id']
         return False
+
