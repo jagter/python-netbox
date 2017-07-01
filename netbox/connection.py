@@ -93,7 +93,7 @@ class NetboxConnection(object):
         if resp_ok and resp_status == 201:
             return resp_ok, resp_data
         else:
-            if resp_data['name'][0]:
+            if 'name' in resp_data:
                 return resp_ok, resp_data['name'][0]
             else:
                 return resp_ok, resp_data
