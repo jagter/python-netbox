@@ -60,8 +60,8 @@ class Dcim(object):
     def create_rack(self, name, site_name, **kwargs):
         """Create new rack
 
-        :param name: Name of the rack
-        :param site: Site to add rack to
+        :param name: Organizational rack name
+        :param site_name: The site at which the rack exists
         :param kwargs: Optional arguments
         :return: bool True if successful otherwise create exception
         """
@@ -321,10 +321,10 @@ class Dcim(object):
         """Return all manufactures"""
         return self.netbox_con.get('/dcim/manufacturers/')['results']
 
-    def create_manufacture(self, name, slug, **kwargs):
-        """Create new manufacture
+    def create_manufacturer(self, name, slug, **kwargs):
+        """Create new manufacturer
 
-        :param name: Name of manufacture
+        :param name: Name of manufacturer
         :param slug: Name of slug
         :param kwargs: Optional arguments
         :return: bool True if successful otherwise raise CreateException
@@ -337,28 +337,28 @@ class Dcim(object):
         else:
             raise exceptions.CreateException(resp_data)
 
-    def delete_manufacture(self, manufacture_name):
-        """Delete manufacture
+    def delete_manufacturer(self, manufacturer_name):
+        """Delete manufacturer
 
-        :param manufacture_name: Name of manufacture to delete
+        :param manufacturer_name: Name of manufacturer to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        manufacture_id = self.__convert_manufacture(manufacture_name)
+        manufacturer_id = self.__convert_manufacturer(manufacturer_name)
 
-        if not self.netbox_con.delete('/dcim/manufacturers/', manufacture_id):
-            err_msg = 'Unable to delete manufacturer: {}'.format(manufacture_name)
+        if not self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id):
+            err_msg = 'Unable to delete manufacturer: {}'.format(manufacturer_name)
             raise exceptions.DeleteException(err_msg)
 
         return True
 
-    def __convert_manufacture(self, manufacture_name):
-        """Convert manufacture name to manufacture id
+    def __convert_manufacturer(self, manufacturer_name):
+        """Convert manufacturer name to manufacturer id
 
-        :param manufacture_name: Name of manufacture
-        :return: manufacture id if found otherwise bool False
+        :param manufacturer_name: Name of manufacturer
+        :return: manufacturer id if found otherwise bool False
         """
         for item in self.get_manufactures()['results']:
-            if item['name'] == manufacture_name:
+            if item['name'] == manufacturer_name:
                 return item['id']
         return False
 
