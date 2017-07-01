@@ -93,7 +93,10 @@ class NetboxConnection(object):
         if resp_ok and resp_status == 201:
             return resp_ok, resp_data
         else:
-            return resp_ok, resp_data['name'][0]
+            if resp_data['name'][0]:
+                return resp_ok, resp_data['name'][0]
+            else:
+                return resp_ok, resp_data
 
     def delete(self, params, del_id):
         if self.auth:
