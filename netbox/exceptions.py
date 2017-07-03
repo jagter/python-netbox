@@ -19,7 +19,15 @@ class NotFoundException(BaseException):
 
 class CreateException(BaseException):
     """Raised when creation failed"""
-    pass
+    def __init__(self, resp_data):
+
+        if isinstance(resp_data, dict):
+            self.err = ''.join('{} '.format(val[0]) for key, val in resp_data.items())
+        else:
+            self.err = 'Creation failed with unknown reason'
+
+    def __str__(self):
+        return '{}'.format(self.err)
 
 
 class AuthException(BaseException):

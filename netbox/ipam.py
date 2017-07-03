@@ -28,12 +28,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"address": address}
-        resp_ok, resp_data = self.netbox_con.post('/ipam/ip-addresses/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/ipam/ip-addresses/', required_fields, **kwargs)
 
     def delete_ip_address(self, address):
         """Delete IP address
@@ -74,10 +69,7 @@ class Ipam(object):
         required_fields = {"prefix": prefix}
 
         if ipaddress.ip_network(prefix, strict=True):
-            resp_ok, resp_data = self.netbox_con.post('/ipam/prefixes/', required_fields, **kwargs)
-            if resp_ok:
-                return True
-            raise exceptions.CreateException(resp_data)
+            return self.netbox_con.post('/ipam/prefixes/', required_fields, **kwargs)
 
     def delete_ip_prefix(self, prefix):
         """Delete IP prefix
@@ -117,12 +109,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "rd": rd}
-        resp_ok, resp_data = self.netbox_con.post('/ipam/vrfs/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/ipam/vrfs/', required_fields, **kwargs)
 
     def delete_vrf(self, vrf):
         """Delete vrf
@@ -165,12 +152,7 @@ class Ipam(object):
         required_fields = {"prefix": prefix, "rir": rir_id}
 
         if ipaddress.ip_network(prefix, strict=True):
-            resp_ok, resp_data = self.netbox_con.post('/ipam/aggregates/', required_fields, **kwargs)
-
-            if resp_ok:
-                return True
-            else:
-                raise exceptions.CreateException(resp_data)
+            return self.netbox_con.post('/ipam/aggregates/', required_fields, **kwargs)
 
     def get_rirs(self):
         """Return all rirs"""
@@ -184,12 +166,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
-        resp_ok, resp_data = self.netbox_con.post('/ipam/rirs/', required_fields)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/ipam/rirs/', required_fields)
 
     def delete_rir(self, rir_name):
         """Delete rir
@@ -227,12 +204,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
-        resp_ok, resp_data = self.netbox_con.post('/ipam/roles/', required_fields)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/ipam/roles/', required_fields)
 
     def delete_prefix_role(self, prefix_role):
         """Delete prefix role
@@ -270,12 +242,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"vid": vid, "name": vlan_name}
-        resp_ok, resp_data = self.netbox_con.post('/ipam/vlans/', required_fields)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/ipam/vlans/', required_fields)
 
     def delete_vlan(self, vid):
         """Delete VLAN based on VLAN ID

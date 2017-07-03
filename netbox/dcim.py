@@ -19,13 +19,7 @@ class Dcim(object):
         :return: bool True if successful otherwise exception raised
         """
         required_fields = {"name": name, "slug": slug}
-
-        resp_ok, resp_data = self.netbox_con.post('/dcim/sites/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/sites/', required_fields, **kwargs)
 
     def delete_site(self, site_name):
         """Delete site
@@ -67,12 +61,7 @@ class Dcim(object):
         """
         site_id = self.__convert_site(site_name)
         required_fields = {"name": name, "site": site_id}
-        resp_ok, resp_data = self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
 
     def delete_rack(self, rack_name):
         """Delete rack
@@ -191,12 +180,7 @@ class Dcim(object):
             err_msg = 'Unable to create device. device_type {} not found'.format(device_type)
             raise ValueError(err_msg)
 
-        resp_ok, resp_data = self.netbox_con.post('/dcim/devices/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/devices/', required_fields, **kwargs)
 
     def delete_device(self, device_name):
         """
@@ -238,12 +222,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"model": model, "slug": slug, "manufacturer": manufacturer}
-        resp_ok, resp_data = self.netbox_con.post('/dcim/device-types/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/device-types/', required_fields, **kwargs)
 
     def delete_device_type(self, model_name):
         """Delete device type
@@ -285,12 +264,7 @@ class Dcim(object):
         :return: bool True if successful otherwise CreateException
         """
         required_fields = {"name": name, "color": color, "slug": slug}
-        resp_ok, resp_data = self.netbox_con.post('/dcim/device-roles/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/device-roles/', required_fields, **kwargs)
 
     def delete_device_role(self, device_role):
         """Delete device by device role
@@ -330,12 +304,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
-        resp_ok, resp_data = self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
 
     def delete_manufacturer(self, manufacturer_name):
         """Delete manufacturer
@@ -375,12 +344,7 @@ class Dcim(object):
         :return:
         """
         required_fields = {"name": name, "slug": slug}
-        resp_ok, resp_data = self.netbox_con.post('/dcim/platforms/', required_fields, **kwargs)
-
-        if resp_ok:
-            return True
-        else:
-            raise exceptions.CreateException(resp_data)
+        return self.netbox_con.post('/dcim/platforms/', required_fields, **kwargs)
 
     def delete_platform(self, platform_name):
         """Delete platform

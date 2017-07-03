@@ -91,12 +91,10 @@ class NetboxConnection(object):
         resp_ok, resp_status, resp_data = self.__request('POST', params=params, body=body_data)
 
         if resp_ok and resp_status == 201:
-            return resp_ok, resp_data
+            return True
         else:
-            if 'name' in resp_data:
-                return resp_ok, resp_data['name'][0]
-            else:
-                return resp_ok, resp_data
+            raise exceptions.CreateException(resp_data)
+
 
     def delete(self, params, del_id):
         if self.auth:
