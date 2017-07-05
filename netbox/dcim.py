@@ -28,12 +28,7 @@ class Dcim(object):
         :return: bool True if succesful otherwase delete exception
         """
         site_id = self.__convert_site(site_name)
-
-        if not self.netbox_con.delete('/dcim/sites/', site_id):
-            err_msg = 'Unable to delete site {}'.format(site_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/sites/', site_id)
 
     def __convert_site(self, site_name):
         """Convert site name to site id
@@ -70,12 +65,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         rack_id = self.__convert_rack(rack_name)
-
-        if not self.netbox_con.delete('/dcim/racks/', rack_id):
-            err_msg = 'Unable to delete rack: {}'.format(rack_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/racks/', rack_id)
 
     def __convert_rack(self, rack_name):
         """Convert rack_name to rack_id
@@ -189,12 +179,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         device_id = self.__convert_device(device_name)
-
-        if not self.netbox_con.delete('/dcim/devices/', device_id):
-            err_msg = 'Unable to delete device {}'.format(device_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/devices/', device_id)
 
     def __convert_device(self, device_name):
         """Convert device_name to device_id
@@ -231,12 +216,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         device_type_id = self.__convert_device_type(model_name)
-
-        if not self.netbox_con.delete('/dcim/device-types/', device_type_id):
-            err_msg = 'Unable to delete device-type {}'.format(model_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/device-types/', device_type_id)
 
     def __convert_device_type(self, model_name):
         """Convert device type model_name to model_id
@@ -273,12 +253,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         device_role_id = self.__convert_device_role(device_role)
-
-        if not self.netbox_con.delete('/dcim/device-roles/', device_role_id):
-            err_msg = 'Unable to delete device-role {}'.format(device_role)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
 
     def __convert_device_role(self, device_role):
         """Convert device role name to id
@@ -313,12 +288,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         manufacturer_id = self.__convert_manufacturer(manufacturer_name)
-
-        if not self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id):
-            err_msg = 'Unable to delete manufacturer: {}'.format(manufacturer_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
 
     def __convert_manufacturer(self, manufacturer_name):
         """Convert manufacturer name to manufacturer id
@@ -353,12 +323,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         platform_id = self.__convert_platform(platform_name)
-
-        if not self.netbox_con.delete('/dcim/platforms/', platform_id):
-            err_msg = 'Unable to delete platform: {}'.format(platform_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/dcim/platforms/', platform_id)
 
     def __convert_platform(self, platform_name):
         """Convert platform name to platform id

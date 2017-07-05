@@ -105,7 +105,7 @@ class NetboxConnection(object):
         if resp_ok and resp_status == 204:
             return True
         else:
-            return False
+            raise exceptions.DeleteException(resp_data)
 
     def close(self):
 

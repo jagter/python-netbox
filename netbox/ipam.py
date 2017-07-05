@@ -37,12 +37,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         ip_address_id = self.__convert_ip_address(address)
-
-        if not self.netbox_con.delete('/ipam/ip-addresses/', ip_address_id):
-            err_msg = 'Unable to delete IP address: {}'.format(address)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/ip-addresses/', ip_address_id)
 
     def __convert_ip_address(self, ip_address):
         """Convert IP address to id
@@ -78,12 +73,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         ip_prefix_id = self.__convert_ip_prefix(prefix)
-
-        if not self.netbox_con.delete('/ipam/prefixes/', ip_prefix_id):
-            err_msg = 'Unable to delete IP prefix: {}'.format(prefix)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/prefixes/', ip_prefix_id)
 
     def __convert_ip_prefix(self, ip_prefix):
         """Convert IP address to id
@@ -118,12 +108,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         vrf_id = self.__convert_vrf(vrf)
-
-        if not self.netbox_con.delete('/ipam/vrfs/', vrf_id):
-            err_msg = 'Unable to delete vrf: {}'.format(vrf)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/vrfs/', vrf_id)
 
     def __convert_vrf(self, vrf):
         """Convert IP address to id
@@ -175,11 +160,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         rir_id = self.__convert_rir(rir_name)
-        if not self.netbox_con.delete('/ipam/rirs/', rir_id):
-            err_msg = 'Unable to delete rir {}'.format(rir_name)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/rirs/', rir_id)
 
     def __convert_rir(self, rir_name):
         """
@@ -213,11 +194,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         prefix_role_id = self.__convert_prefix_role(prefix_role)
-        if not self.netbox_con.delete('/ipam/role/', prefix_role_id):
-            err_msg = 'Unable to delete prefix role {}'.format(prefix_role)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/role/', prefix_role_id)
 
     def __convert_prefix_role(self, prefix_role):
         """Convert prefix role to id
@@ -251,11 +228,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         vid_id = self.__convert_vlan(vid)
-        if not self.netbox_con.delete('/ipam/vlans/', vid_id):
-            err_msg = 'Unable to delete VLAN {}'.format(vid)
-            raise exceptions.DeleteException(err_msg)
-
-        return True
+        return self.netbox_con.delete('/ipam/vlans/', vid_id)
 
     def __convert_vlan(self, vid):
         """Convert vlan id to id

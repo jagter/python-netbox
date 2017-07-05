@@ -4,7 +4,15 @@ class BaseExceptions(Exception):
 
 class DeleteException(BaseException):
     """Raised when delete failed"""
-    pass
+    def __init__(self, resp_data):
+
+        if isinstance(resp_data, dict):
+            self.err = ''.join('Failed with reason {}'.format(val) for key, val in resp_data.items())
+        else:
+            self.err = 'Delete failed with an unknown reason'
+
+    def __str__(self):
+        return '{}'.format(self.err)
 
 
 class NotFoundException(BaseException):
