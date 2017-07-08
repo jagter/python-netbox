@@ -18,10 +18,11 @@ setup(name='python-netbox',
       author_email='thomas@tjrb.nl',
       url='https://github.com/jagter/python-netbox',
       packages=find_packages(),
-      install_requires=['ipaddress', 'requests']
-      classifiers =
-        Programming Language :: Python :: 3
-        Intended Audience :: System Administrators
-        License :: OSI Approved :: Apache Software License
-        Programming Language :: Python :: 3.6
+      install_requires=['ipaddress', 'requests'],
+      classifiers = [
+        "Programming Language :: Python :: 3",
+        "Intended Audience :: System Administrators",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 3.6",
+      ],
      )
