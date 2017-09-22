@@ -83,34 +83,14 @@ class Dcim(object):
         """Get all devices"""
         return self.netbox_con.get('/dcim/devices/')
 
-    def get_device_by_name(self, name):
-        """Get devices by name
+    def get_device_by_filter(self, filter):
+        """Get devices by filter
 
-        :param name: Name of the device
-        :return: device otherwise NotFoundException
+        :param name: Name of the device to search. Filter can be any field.
+        :return: device result
         """
-        req = self.get_devices()['results']
-
-        for item in req:
-            if item['display_name'] == name:
-                return item
-
-        raise exceptions.NotFoundException(name)
-
-    def get_device_by_serial(self, name):
-        """Get device by serial
-
-        :param name: serial
-        :return: device otherwise raise NotFoundException
-        """
-        req = self.get_devices()
-
-        for item in req:
-            if item['serial'] == name:
-                return item
-
-        raise exceptions.NotFoundException(name)
-
+        param = '/dcim/devices/?q={}'.format(filter)
+        return self.netbox_con.get(param)
 
     def get_devices_per_rack(self, name):
         """Get devices which belongs to the given rack
