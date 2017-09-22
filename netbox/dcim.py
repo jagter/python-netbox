@@ -111,16 +111,6 @@ class Dcim(object):
 
         raise exceptions.NotFoundException(name)
 
-    def get_interfaces_by_device(self, device_name):
-        """Get all interfaces by device
-
-        :param device_name: Name of device to get interfaces off
-        :return: list of interfaces
-        """
-        device_id = self.get_device_by_name(device_name)['id']
-        param = '/dcim/interfaces/?device_id={}'.format(device_id)
-
-        return self.netbox_con.get(param)['results']
 
     def get_devices_per_rack(self, name):
         """Get devices which belongs to the given rack
@@ -335,4 +325,45 @@ class Dcim(object):
             if item['name'] == platform_name:
                 return item['id']
         return False
+
+    def get_interfaces(self):
+        """Return interfaces"""
+        return self.netbox_con.get('/dcim/interfaces')
+
+    def get_interfaces_by_device(self, device_name):
+        """Get all interfaces by device
+
+        :param device_name: Name of device to get interfaces off
+        :return: list of interfaces
+        """
+        device_id = self.get_device_by_name(device_name)['id']
+        return self.netbox_con.get('/dcim/interfaces/', device_id)['results']
+
+    def get_interface_by_id(self, interface_id):
+        """Get interface by id
+
+        :param interface_id: id of the interface
+        :return:
+        """
+        return self.netbox_con.get('/dcim/interfaces/', interface_id)
+
+    def create_interface(self, name, form_facter, device, **kwargs):
+        """Create a new interface
+
+        :param name: name of the interface
+        :param form_facter: interface type. It is not possible to get the list of form factors from the api. Search
+        in the netbox code for the correct form factor number.
+        :param kwargs: optional arguments
+        :return: bool True if successful otherwise raise CreateException
+        """
+        required_fields = {"name": name, "form_factor": form_facter, "device": device}
+        return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
+
+    def delete_interface_by_id(self, interface_id):
+        """Delete interface by id
+
+        :param interface_id: id of interface to remove
+        :return:
+        """
+        return self.netbox_con.delete('/dcim/interfaces/', interface_id)
 
