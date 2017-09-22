@@ -215,7 +215,6 @@ class Dcim(object):
         :return: model_id otherwise bool False
         """
         for item in self.get_device_types()['results']:
-            print(item)
             if item['model'] == model_name:
                 return item['id']
         return False
@@ -337,7 +336,8 @@ class Dcim(object):
         :return: list of interfaces
         """
         device_id = self.get_device_by_name(device_name)['id']
-        return self.netbox_con.get('/dcim/interfaces/', device_id)['results']
+        param = '/dcim/interfaces/?device_id={}'.format(device_id)
+        return self.netbox_con.get(param)['results']
 
     def get_interface_by_id(self, interface_id):
         """Get interface by id
