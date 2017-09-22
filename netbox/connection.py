@@ -35,8 +35,13 @@ class NetboxConnection(object):
         elif auth is None and auth_token is None:
             raise ValueError('Please use auth or auth_token for authentication')
 
-    def __request(self, method, params=None, body=None):
-        url = self.base_url + str(params)
+    def __request(self, method, params=None, key=None, body=None):
+        if key is not None:
+            url = self.base_url + str(params) + str('{}/'.format(key))
+        else:
+            url = self.base_url + str(params)
+
+        print(url)
         request = requests.Request(method=method, url=url, json=body)
         prepared_request = self.session.prepare_request(request)
 
@@ -62,9 +67,9 @@ class NetboxConnection(object):
 
         return response.ok, response.status_code, response_data
 
-    def get(self, params):
+    def get(self, params, key=None):
         self.session.params.update({'limit': self.limit})
-        resp_ok, resp_status, resp_data = self.__request('GET', params)
+        resp_ok, resp_status, resp_data = self.__request('GET', params, key)
 
         if resp_ok and resp_status == 200:
             return resp_data
