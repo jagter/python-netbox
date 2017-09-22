@@ -41,7 +41,6 @@ class NetboxConnection(object):
         else:
             url = self.base_url + str(params)
 
-        print(url)
         request = requests.Request(method=method, url=url, json=body)
         prepared_request = self.session.prepare_request(request)
 
