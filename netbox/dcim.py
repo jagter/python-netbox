@@ -158,7 +158,7 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_device_by_filter(device)
+        device_id = self.get_device_by_filter(device)[0]['id']
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
     def __convert_device(self, device_name):
