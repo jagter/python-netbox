@@ -86,7 +86,7 @@ class Dcim(object):
     def get_device_by_filter(self, filter):
         """Get devices by filter
 
-        :param name: Name of the device to search. Filter can be any field.
+        :param filter: Name of the device to search. Filter can be any field.
         :return: device result
         """
         param = '/dcim/devices/?q={}'.format(filter)
@@ -150,6 +150,16 @@ class Dcim(object):
         """
         device_id = self.__convert_device(device_name)
         return self.netbox_con.delete('/dcim/devices/', device_id)
+
+    def update_device(self, device, **kwargs):
+        """
+
+        :param device: device name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_id = self.get_device_by_filter(device)['results'][0]['id']
+        return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
     def __convert_device(self, device_name):
         """Convert device_name to device_id
@@ -315,7 +325,7 @@ class Dcim(object):
         :param device_name: Name of device to get interfaces off
         :return: list of interfaces
         """
-        device_id = self.get_device_by_name(device_name)['id']
+        device_id = self.get_device_by_filter(device_name)['id']
         param = '/dcim/interfaces/?device_id={}'.format(device_id)
         return self.netbox_con.get(param)['results']
 
