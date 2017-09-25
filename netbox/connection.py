@@ -80,6 +80,21 @@ class NetboxConnection(object):
             raise exceptions.AuthException('With basic auth the API is not writable')
         return self.__request('PUT', params)
 
+    def patch(self, params, key, **kwargs):
+        if self.auth:
+            raise exceptions.AuthException('With basic auth the API is not writable')
+        body_data = {}
+
+        for k, v in kwargs.items():
+            body_data.update({k: v})
+
+        resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
+
+        if resp_ok and resp_status == 200:
+            return True
+        else:
+            raise exceptions.UpdateException(resp_data)
+
     def post(self, params, required_fields, **kwargs):
         if self.auth:
             raise exceptions.AuthException('With basic auth the API is not writable')
