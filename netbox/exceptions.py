@@ -37,6 +37,16 @@ class CreateException(BaseException):
     def __str__(self):
         return '{}'.format(self.err)
 
+class UpdateException(BaseException):
+    """Raised when an object update fails"""
+    def __init__(self, resp_data):
+        if isinstance(resp_data, dict):
+            self.err = ''.join('{} '.format(val[0]) for key, val in resp_data.items())
+        else:
+            self.err = 'Update failed with unknown reason'
+
+    def __str__(self):
+        return '{}'.format(self.err)
 
 class AuthException(BaseException):
     """Raised when an API call method is not allowed"""
