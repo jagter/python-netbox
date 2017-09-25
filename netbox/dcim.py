@@ -90,7 +90,7 @@ class Dcim(object):
         :return: device result
         """
         param = '/dcim/devices/?q={}'.format(filter)
-        return self.netbox_con.get(param)
+        return self.netbox_con.get(param)['results']
 
     def get_devices_per_rack(self, name):
         """Get devices which belongs to the given rack
@@ -158,7 +158,7 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_device_by_filter(device)['results'][0]['id']
+        device_id = self.get_device_by_filter(device)
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
     def __convert_device(self, device_name):
@@ -325,7 +325,7 @@ class Dcim(object):
         :param device_name: Name of device to get interfaces off
         :return: list of interfaces
         """
-        device_id = self.get_device_by_filter(device_name)['id']
+        device_id = self.get_device_by_filter(device_name)[0]['id']
         param = '/dcim/interfaces/?device_id={}'.format(device_id)
         return self.netbox_con.get(param)['results']
 
