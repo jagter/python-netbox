@@ -11,14 +11,17 @@ class Ipam(object):
         """Return all ip addresses"""
         return self.netbox_con.get('/ipam/ip-addresses/')
 
-    def get_ip_by_id(self, ip_id):
-        """Get IP by it's ID
+    def get_ip(self, **kwargs):
+        """Return query results"""
+        return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
 
-        :param ip_id: The ID of the ip address
+    def get_ip_by_device(self, device_name):
+        """Get IPs which are associated to a device
+
+        :param device_name: Name of the device
         :return: ip address information
         """
-        param = '/ipam/ip-addresses/{}/'.format(ip_id)
-        return self.netbox_con.get(param)
+        return self.netbox_con.get('/ipam/ip-addresses', device_name=device_name)
 
     def create_ip_address(self, address, **kwargs):
         """Create a new ip address
@@ -36,7 +39,7 @@ class Ipam(object):
         :param address: IP address to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        ip_address_id = self.__convert_ip_address(address)
+        ip_address_id = self.get_ip(address)
         return self.netbox_con.delete('/ipam/ip-addresses/', ip_address_id)
 
     def __convert_ip_address(self, ip_address):
@@ -90,6 +93,14 @@ class Ipam(object):
         """Get all vrfs"""
         return self.netbox_con.get('/ipam/vrfs/')
 
+    def get_vrf(self, **kwargs):
+        """Get vrf based on filter values
+
+        :param kwargs: Filter values
+        :return: vrf
+        """
+        return self.netbox_con.get('/ipam/vrfs/', **kwargs)
+
     def create_vrf(self, name, rd, **kwargs):
         """Create a new vrf
 
@@ -107,19 +118,8 @@ class Ipam(object):
         :param vrf: Name of vrf to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        vrf_id = self.__convert_vrf(vrf)
+        vrf_id = self.get_vrf(name=vrf)[0]['id']
         return self.netbox_con.delete('/ipam/vrfs/', vrf_id)
-
-    def __convert_vrf(self, vrf):
-        """Convert IP address to id
-
-        :param vrf: The vrf to convert
-        :return: vrf id if found otherwise bool False
-        """
-        for item in self.get_ip_addresses()['results']:
-            if item['name'] == vrf:
-                return item['id']
-        return False
 
     def get_aggregates(self):
         """Return all aggregates"""
@@ -133,7 +133,7 @@ class Ipam(object):
         :param kwargs: Optional Arguments
         :return:
         """
-        rir_id = self.__convert_rir(rir)
+        rir_id = self.get_rir(name=rir)[0]['id']
         required_fields = {"prefix": prefix, "rir": rir_id}
 
         if ipaddress.ip_network(prefix, strict=True):
@@ -142,6 +142,14 @@ class Ipam(object):
     def get_rirs(self):
         """Return all rirs"""
         return self.netbox_con.get('/ipam/rirs/')
+
+    def get_rir(self, **kwargs):
+        """Get rir based on filter values
+
+        :param kwargs: Filter values
+        :return: rir
+        """
+        return self.netbox_con.get('/ipam/rirs', **kwargs)
 
     def create_rir(self, name, slug):
         """Create new rir
@@ -159,23 +167,20 @@ class Ipam(object):
         :param rir_name: rir name to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        rir_id = self.__convert_rir(rir_name)
+        rir_id = self.get_rir(name=rir_name)[0]['id']
         return self.netbox_con.delete('/ipam/rirs/', rir_id)
-
-    def __convert_rir(self, rir_name):
-        """
-
-        :param rir_name:
-        :return:
-        """
-        for item in self.get_rirs()['results']:
-            if item['name'] == rir_name:
-                return item['id']
-        return False
 
     def get_prefix_roles(self):
         """Return all roles"""
         return self.netbox_con.get('/ipam/roles/')
+
+    def get_prefix_role(self, **kwargs):
+        """Return prefix role based on filter
+
+        :param kwargs: filter options
+        :return: prefix role
+        """
+        return self.netbox_con.get('/ipam/roles/', **kwargs)
 
     def create_prefix_role(self, name, slug):
         """Create new prefix role
@@ -193,23 +198,20 @@ class Ipam(object):
         :param prefix_role: prefix role to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        prefix_role_id = self.__convert_prefix_role(prefix_role)
+        prefix_role_id = self.get_prefix_role(name=prefix_role)[0]['id']
         return self.netbox_con.delete('/ipam/role/', prefix_role_id)
-
-    def __convert_prefix_role(self, prefix_role):
-        """Convert prefix role to id
-
-        :param prefix_role: Name of the prefix role to convert
-        :return: prefix role id if successful otherwise bool False
-        """
-        for item in self.get_rirs()['results']:
-            if item['name'] == prefix_role:
-                return item['id']
-        return False
 
     def get_vlans(self):
         """Return all vlans"""
-        return self.netbox_con.get('/ipam/vlans')
+        return self.netbox_con.get('/ipam/vlans/')
+
+    def get_vlan(self, **kwargs):
+        """Get vlan by filter
+
+        :param kwargs: Filter values
+        :return: vlan
+        """
+        return self.netbox_con.get('/ipam/vlans/', **kwargs)
 
     def create_vlan(self, vid, vlan_name):
         """Create new vlan
@@ -227,16 +229,5 @@ class Ipam(object):
         :param vid: vlan id to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        vid_id = self.__convert_vlan(vid)
+        vid_id = self.get_vlan(vid=vid)[0]['id']
         return self.netbox_con.delete('/ipam/vlans/', vid_id)
-
-    def __convert_vlan(self, vid):
-        """Convert vlan id to id
-
-        :param vid: VLAN ID
-        :return: vlan id if successful otherwise bool False
-        """
-        for item in self.get_vlans()['results']:
-            if item['vid'] == vid:
-                return item['id']
-        return False
