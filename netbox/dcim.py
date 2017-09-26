@@ -1,6 +1,3 @@
-from netbox import exceptions
-
-
 class Dcim(object):
 
     def __init__(self, netbox_con):
@@ -9,6 +6,14 @@ class Dcim(object):
     def get_sites(self):
         """Returns the available sites"""
         return self.netbox_con.get('/dcim/sites/')
+
+    def get_site(self, **kwargs):
+        """Get site by filter
+
+        :param kwargs: Filter can be any field.
+        :return: site result
+        """
+        return self.netbox_con.get('/dcim/sites/', **kwargs)
 
     def create_site(self, name, slug, **kwargs):
         """Create new site
@@ -27,24 +32,20 @@ class Dcim(object):
         :param site_name: Site to delete
         :return: bool True if succesful otherwase delete exception
         """
-        site_id = self.__convert_site(site_name)
+        site_id = self.get_site(name=site_name)[0]['id']
         return self.netbox_con.delete('/dcim/sites/', site_id)
-
-    def __convert_site(self, site_name):
-        """Convert site name to site id
-
-        :param site_name: name of the site to convert
-        :return: if site found site_id otherwise bool False
-        """
-        for item in self.get_sites()['results']:
-            if item['name'] == site_name:
-                return item['id']
-
-        return False
 
     def get_racks(self):
         """Returns the available racks"""
         return self.netbox_con.get('/dcim/racks/')
+
+    def get_rack(self, **kwargs):
+        """Return rack id based on name
+
+        :param kwargs:
+        :return: Rack
+        """
+        return self.netbox_con.get('/dcim/racks/', **kwargs)
 
     def create_rack(self, name, site_name, **kwargs):
         """Create new rack
@@ -54,7 +55,7 @@ class Dcim(object):
         :param kwargs: Optional arguments
         :return: bool True if successful otherwise create exception
         """
-        site_id = self.__convert_site(site_name)
+        site_id = self.get_site(name=site_name)[0]['id']
         required_fields = {"name": name, "site": site_id}
         return self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
 
@@ -64,48 +65,29 @@ class Dcim(object):
         :param rack_name: Name of the rack to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        rack_id = self.__convert_rack(rack_name)
+        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
         return self.netbox_con.delete('/dcim/racks/', rack_id)
-
-    def __convert_rack(self, rack_name):
-        """Convert rack_name to rack_id
-
-        :param rack_name: Name of the rack to convert
-        :return: if rack_name found rack_id otherwise bool False
-        """
-        for item in self.get_racks()['results']:
-            if item['name'] == rack_name:
-                return item['id']
-
-        return False
 
     def get_devices(self):
         """Get all devices"""
         return self.netbox_con.get('/dcim/devices/')
 
-    def get_device_by_filter(self, filter):
-        """Get devices by filter
+    def get_device(self, **kwargs):
+        """Get device by filter
 
-        :param filter: Name of the device to search. Filter can be any field.
+        :param kwargs: Filter can be any field.
         :return: device result
         """
-        param = '/dcim/devices/?q={}'.format(filter)
-        return self.netbox_con.get(param)['results']
+        return self.netbox_con.get('/dcim/devices/', **kwargs)
 
-    def get_devices_per_rack(self, name):
+    def get_devices_per_rack(self, rack_name):
         """Get devices which belongs to the given rack
 
-        :param name: Name of the rack
+        :param rack_name: Name of the rack
         :return: list of devices otherwise an empty list
         """
-        output = []
-
-        for item in self.get_devices()['results']:
-            if item['rack'] is not None:
-                if item['rack']['name'] == name:
-                    output.append(item)
-
-        return output
+        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        return self.netbox_con.get('/dcim/devices', rack_id=rack_id)
 
     def create_device(self, name, device_role, site_name, device_type, **kwargs):
         """Create a new device
@@ -118,9 +100,9 @@ class Dcim(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name}
-        device_role_id = self.__convert_device_role(device_role)
-        site_id = self.__convert_site(site_name)
-        device_type_id = self.__convert_device_type(device_type)
+        device_role_id = self.get_device_role(name=device_role)[0]['id']
+        site_id = self.get_site(name=site_name)[0]['id']
+        device_type_id = self.get_device_type(model=device_type)[0]['id']
 
         if device_role_id:
             required_fields.update({"device_role": device_role_id})
@@ -148,7 +130,7 @@ class Dcim(object):
         :param device_name: Device to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_id = self.__convert_device(device_name)
+        device_id = self.get_device(name=device_name)[0]['id']
         return self.netbox_con.delete('/dcim/devices/', device_id)
 
     def update_device(self, device, **kwargs):
@@ -158,24 +140,20 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_device_by_filter(device)[0]['id']
+        device_id = self.get_device(name=device)[0]['id']
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
-
-    def __convert_device(self, device_name):
-        """Convert device_name to device_id
-
-        :param device_name: Name of device
-        :return: device_id otherwise bool False
-        """
-        for item in self.get_devices()['results']:
-            if item['name'] == device_name:
-                return item['id']
-
-        return False
 
     def get_device_types(self):
         """Get devices by device type"""
         return self.netbox_con.get('/dcim/device-types/')
+
+    def get_device_type(self, **kwargs):
+        """Get device type by filter
+
+        :param kwargs: Search filter
+        :return: device type
+        """
+        return self.netbox_con.get('/dcim/device-types/', **kwargs)
 
     def create_device_type(self, model, slug, manufacturer, **kwargs):
         """Create device type
@@ -195,23 +173,20 @@ class Dcim(object):
         :param model_name: Name of the model
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_type_id = self.__convert_device_type(model_name)
+        device_type_id = self.get_device_type(model=model_name)[0]['id']
         return self.netbox_con.delete('/dcim/device-types/', device_type_id)
-
-    def __convert_device_type(self, model_name):
-        """Convert device type model_name to model_id
-
-        :param model_name:
-        :return: model_id otherwise bool False
-        """
-        for item in self.get_device_types()['results']:
-            if item['model'] == model_name:
-                return item['id']
-        return False
 
     def get_device_roles(self):
         """Return all the device roles"""
         return self.netbox_con.get('/dcim/device-roles/')
+
+    def get_device_role(self, **kwargs):
+        """Get device role by filter
+
+        :param kwargs: Search filter
+        :return: device role
+        """
+        return self.netbox_con.get('/dcim/device-roles/', **kwargs)
 
     def create_device_role(self, name, color, slug, **kwargs):
         """Create device role
@@ -231,23 +206,20 @@ class Dcim(object):
         :param device_role: name of the role
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_role_id = self.__convert_device_role(device_role)
+        device_role_id = self.get_device_role(name=device_role)[0]['id']
         return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
-
-    def __convert_device_role(self, device_role):
-        """Convert device role name to id
-
-        :param device_role: Name of device_role
-        :return: device_role_id if successful otherwise bool False
-        """
-        for item in self.get_device_roles()['results']:
-            if item['name'] == device_role:
-                return item['id']
-        return False
 
     def get_manufactures(self):
         """Return all manufactures"""
-        return self.netbox_con.get('/dcim/manufacturers/')['results']
+        return self.netbox_con.get('/dcim/manufacturers/')
+
+    def get_manufacturer(self, **kwargs):
+        """Get manufacturer by filter
+
+        :param kwargs: Search filter
+        :return: manufacturer
+        """
+        return self.netbox_con.get('/dcim/manufacturers/', **kwargs)
 
     def create_manufacturer(self, name, slug, **kwargs):
         """Create new manufacturer
@@ -266,23 +238,20 @@ class Dcim(object):
         :param manufacturer_name: Name of manufacturer to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        manufacturer_id = self.__convert_manufacturer(manufacturer_name)
+        manufacturer_id = self.get_manufacturer(name=manufacturer_name)[0]['id']
         return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
-
-    def __convert_manufacturer(self, manufacturer_name):
-        """Convert manufacturer name to manufacturer id
-
-        :param manufacturer_name: Name of manufacturer
-        :return: manufacturer id if found otherwise bool False
-        """
-        for item in self.get_manufactures()['results']:
-            if item['name'] == manufacturer_name:
-                return item['id']
-        return False
 
     def get_platforms(self):
         """Return all platforms"""
         return self.netbox_con.get('/dcim/platforms')
+
+    def get_platform(self, **kwargs):
+        """Get platform by filter
+
+        :param kwargs: Search filter
+        :return: platform
+        """
+        return self.netbox_con.get('/dcim/platform/', **kwargs)
 
     def create_platform(self, name, slug, **kwargs):
         """Create new platform
@@ -301,23 +270,20 @@ class Dcim(object):
         :param platform_name: Name of platform to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        platform_id = self.__convert_platform(platform_name)
+        platform_id = self.get_platform(name=platform_name)[0]['id']
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
-
-    def __convert_platform(self, platform_name):
-        """Convert platform name to platform id
-
-        :param platform_name: Name of platform
-        :return: platform id if found otherwise bool False
-        """
-        for item in self.get_platforms()['results']:
-            if item['name'] == platform_name:
-                return item['id']
-        return False
 
     def get_interfaces(self):
         """Return interfaces"""
         return self.netbox_con.get('/dcim/interfaces')
+
+    def get_interface(self, **kwargs):
+        """Get interface by filter
+
+        :param kwargs: Search filter
+        :return: interface
+        """
+        return self.netbox_con.get('/dcim/interfaces/', **kwargs)
 
     def get_interfaces_by_device(self, device_name):
         """Get all interfaces by device
@@ -325,17 +291,7 @@ class Dcim(object):
         :param device_name: Name of device to get interfaces off
         :return: list of interfaces
         """
-        device_id = self.get_device_by_filter(device_name)[0]['id']
-        param = '/dcim/interfaces/?device_id={}'.format(device_id)
-        return self.netbox_con.get(param)['results']
-
-    def get_interface_by_id(self, interface_id):
-        """Get interface by id
-
-        :param interface_id: id of the interface
-        :return:
-        """
-        return self.netbox_con.get('/dcim/interfaces/', interface_id)
+        return self.netbox_con.get('/dcim/interfaces', device=device_name)
 
     def create_interface(self, name, form_facter, device, **kwargs):
         """Create a new interface
@@ -344,6 +300,7 @@ class Dcim(object):
         :param form_facter: interface type. It is not possible to get the list of form factors from the api. Search
         in the netbox code for the correct form factor number.
         :param kwargs: optional arguments
+        :param device: name of the device to associate interface with
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "form_factor": form_facter, "device": device}
