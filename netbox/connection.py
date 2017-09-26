@@ -35,11 +35,12 @@ class NetboxConnection(object):
         elif auth is None and auth_token is None:
             raise ValueError('Please use auth or auth_token for authentication')
 
-    def __request(self, method, params=None, key=None, body=None):
-        if key is not None:
-            url = self.base_url + str(params) + str('{}/'.format(key))
-        else:
-            url = self.base_url + str(params)
+    def __request(self, method, params=None, key=None, body=None, url=None):
+        if url is None:
+            if key is not None:
+                url = self.base_url + str(params) + str('{}/'.format(key))
+            else:
+                url = self.base_url + str(params)
 
         request = requests.Request(method=method, url=url, json=body)
         prepared_request = self.session.prepare_request(request)
@@ -66,12 +67,21 @@ class NetboxConnection(object):
 
         return response.ok, response.status_code, response_data
 
-    def get(self, params, key=None):
+    def get(self, param, key=None, **kwargs):
         self.session.params.update({'limit': self.limit})
-        resp_ok, resp_status, resp_data = self.__request('GET', params, key)
+
+        if kwargs:
+            url = '{}{}?{}'.format(self.base_url, param,
+                                   '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()))
+        elif key:
+            url = '{}{}/?q={}'.format(self.base_url, param, key)
+        else:
+            url = '{}{}'.format(self.base_url, param)
+
+        resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
 
         if resp_ok and resp_status == 200:
-            return resp_data
+            return resp_data['results']
         else:
             return list
 
