@@ -57,6 +57,14 @@ class Ipam(object):
         """Return all ip prefixes"""
         return self.netbox_con.get('/ipam/prefixes/')
 
+    def get_ip_prefix(self, **kwargs):
+        """Get prefix based on filter values
+
+        :param kwargs: filter values
+        :return: prefix
+        """
+        return self.netbox_con.get('/ipam/prefixes/', **kwargs)
+
     def create_ip_prefix(self, prefix, **kwargs):
         """Create a new ip prefix
 
@@ -69,25 +77,24 @@ class Ipam(object):
         if ipaddress.ip_network(prefix, strict=True):
             return self.netbox_con.post('/ipam/prefixes/', required_fields, **kwargs)
 
-    def delete_ip_prefix(self, prefix):
+    def delete_ip_prefix(self, **kwargs):
         """Delete IP prefix
 
-        :param prefix: IP prefix to delete
+        :param kwargs: Delete prefix based on filter values
         :return: bool True if successful otherwise raise DeleteException
         """
-        ip_prefix_id = self.__convert_ip_prefix(prefix)
+        ip_prefix_id = self.get_ip_prefix(**kwargs)[0]['id']
         return self.netbox_con.delete('/ipam/prefixes/', ip_prefix_id)
 
-    def __convert_ip_prefix(self, ip_prefix):
-        """Convert IP address to id
+    def get_next_available_ip(self, **kwargs):
+        """Return next available ip in prefix
 
-        :param ip_prefix: The IP prefix
-        :return: ip prefix id if found otherwise bool False
+        :param kwargs: filter for prefix
+        :return: next available ip
         """
-        for item in self.get_ip_addresses()['results']:
-            if item['prefix'] == ip_prefix:
-                return item['id']
-        return False
+        prefix_id =  self.get_ip_prefix(**kwargs)[0]['id']
+        param = '/ipam/prefixes/{}/available-ips/'.format(prefix_id)
+        return self.netbox_con.get(param, limit=1)[0]['address']
 
     def get_vrfs(self):
         """Get all vrfs"""
@@ -201,6 +208,8 @@ class Ipam(object):
         prefix_role_id = self.get_prefix_role(name=prefix_role)[0]['id']
         return self.netbox_con.delete('/ipam/role/', prefix_role_id)
 
+
+
     def get_vlans(self):
         """Return all vlans"""
         return self.netbox_con.get('/ipam/vlans/')
@@ -231,3 +240,5 @@ class Ipam(object):
         """
         vid_id = self.get_vlan(vid=vid)[0]['id']
         return self.netbox_con.delete('/ipam/vlans/', vid_id)
+
+
