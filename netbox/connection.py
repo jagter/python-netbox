@@ -5,11 +5,10 @@ from netbox import exceptions
 
 class NetboxConnection(object):
 
-    def __init__(self, ssl_verify=False, use_ssl=True, host=None, limit=1000, auth_token=None, auth=None,
+    def __init__(self, ssl_verify=False, use_ssl=True, host=None, auth_token=None, auth=None,
                  port=80):
         self.use_ssl = use_ssl
         self.host = host
-        self.limit = limit
         self.auth_token = auth_token
         self.port = port
         self.auth = auth
@@ -68,7 +67,6 @@ class NetboxConnection(object):
         return response.ok, response.status_code, response_data
 
     def get(self, param, key=None, **kwargs):
-        self.session.params.update({'limit': self.limit})
 
         if kwargs:
             url = '{}{}?{}'.format(self.base_url, param,
@@ -81,7 +79,10 @@ class NetboxConnection(object):
         resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
 
         if resp_ok and resp_status == 200:
-            return resp_data['results']
+            if 'results' in resp_data:
+                return resp_data['results']
+            else:
+                return resp_data
         else:
             return list
 
