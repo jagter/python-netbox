@@ -314,3 +314,22 @@ class Dcim(object):
         """
         return self.netbox_con.delete('/dcim/interfaces/', interface_id)
 
+    def get_interface_connections(self, **kwargs):
+        """Get interface connections
+
+        :param kwargs: Filter arguments
+        :return: list of interface connections
+        """
+        return self.netbox_con.get('/dcim/interface-connections/', **kwargs)
+
+    def create_interface_connection(self, interface_a, interface_b, **kwargs):
+        """Create a new interface-connection
+
+        :param interface_a: id of the source interface
+        :param interface_b: id of the destination interface
+        :param kwargs:
+        :return:
+        """
+        required_fields = {"interface_a": interface_a, "interface_b": interface_b}
+        return self.netbox_con.post('/dcim/interface-connections/', required_fields, **kwargs)
+
