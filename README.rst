@@ -40,23 +40,7 @@ Get devices per rack:
 
 Get device by name
 
-    >>> netbox.dcim.get_device_by_name('device_name')
-
-Get per device the primary ip and mac address:
-
-    >>> output = []
-    >>> for item in a.dcim.get_devices():
-    >>>    device_name = item['name']
-    >>>
-    >>>    if item['primary_ip'] is not None:
-    >>>        primary_ip_id = item['primary_ip']['id']
-    >>>        get_ips = a.ipam.get_ip_by_id(primary_ip_id)
-    >>>
-    >>>        output.append({'name': device_name, 'ip': get_ips['address'], 'mac': get_ips['interface']['mac_address']})
-    >>>    else:
-    >>>         print('{} has no primary_ip'.format(item['name']))
-    >>>
-    >>>    print(output)
+    >>> netbox.dcim.get_device(name='device_name')
 
 Create a site:
 
@@ -65,6 +49,10 @@ Create a site:
 Delete a site:
 
     >>> netbox.dcim.delete_site('site1')
+
+Get IP address object:
+
+    >>> netbox.ipam.get_ip(device='device_name', interface_id=interface_id)
 
 -----------------
 Support

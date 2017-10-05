@@ -167,6 +167,16 @@ class Dcim(object):
         required_fields = {"model": model, "slug": slug, "manufacturer": manufacturer}
         return self.netbox_con.post('/dcim/device-types/', required_fields, **kwargs)
 
+    def update_device_type(self, device_type, **kwargs):
+        """
+
+        :param device_type: device-type name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_id = self.get_device_type(model=device_type)[0]['id']
+        return self.netbox_con.patch('/dcim/device-types/', device_id, **kwargs)
+
     def delete_device_type(self, model_name):
         """Delete device type
 
@@ -200,6 +210,16 @@ class Dcim(object):
         required_fields = {"name": name, "color": color, "slug": slug}
         return self.netbox_con.post('/dcim/device-roles/', required_fields, **kwargs)
 
+    def update_device_role(self, device_role, **kwargs):
+        """
+
+        :param device_type: device-type name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_role_id = self.get_device_type(name=device_role)[0]['id']
+        return self.netbox_con.patch('/dcim/device-roles/', device_role_id, **kwargs)
+
     def delete_device_role(self, device_role):
         """Delete device by device role
 
@@ -232,6 +252,16 @@ class Dcim(object):
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
 
+    def update_manufacturer(self, manufacturer, **kwargs):
+        """
+
+        :param manufacturer: manufacturer name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_role_id = self.get_manufacturer(name=manufacturer)[0]['id']
+        return self.netbox_con.patch('/dcim/manufacturer/', device_role_id, **kwargs)
+
     def delete_manufacturer(self, manufacturer_name):
         """Delete manufacturer
 
@@ -263,6 +293,16 @@ class Dcim(object):
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/platforms/', required_fields, **kwargs)
+
+    def update_platform(self, platform, **kwargs):
+        """
+
+        :param platform: device name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_role_id = self.get_manufacturer(name=platform)[0]['id']
+        return self.netbox_con.patch('/dcim/platforms/', device_role_id, **kwargs)
 
     def delete_platform(self, platform_name):
         """Delete platform
@@ -305,6 +345,16 @@ class Dcim(object):
         """
         required_fields = {"name": name, "form_factor": form_facter, "device": device}
         return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
+
+    def update_interface(self, interface, **kwargs):
+        """
+
+        :param interface: interface to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        device_role_id = self.get_manufacturer(name=interface)[0]['id']
+        return self.netbox_con.patch('/dcim/platforms/', device_role_id, **kwargs)
 
     def delete_interface_by_id(self, interface_id):
         """Delete interface by id
