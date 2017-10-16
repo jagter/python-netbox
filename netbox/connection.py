@@ -31,8 +31,6 @@ class NetboxConnection(object):
 
         if auth and auth_token:
             raise ValueError('Only one authentication method is possible. Please use auth or auth_token')
-        elif auth is None and auth_token is None:
-            raise ValueError('Please use auth or auth_token for authentication')
 
     def __request(self, method, params=None, key=None, body=None, url=None):
         if url is None:
