@@ -11,7 +11,7 @@ def readme():
         return f.read()
 
 setup(name='python-netbox',
-      version='0.0.1',
+      version='0.0.2',
       description='Python NetBox Client',
       long_description=readme(),
       author='Thomas van der Jagt',
