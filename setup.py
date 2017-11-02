@@ -17,6 +17,7 @@ setup(name='python-netbox',
       author='Thomas van der Jagt',
       author_email='thomas@tjrb.nl',
       url='https://github.com/jagter/python-netbox',
+      download_url='https://github.com/jagter/python-netbox/releases/tag/0.0.2.tar.gz',
       packages=find_packages(),
       install_requires=['ipaddress', 'requests'],
       classifiers = [
