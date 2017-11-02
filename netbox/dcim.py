@@ -35,6 +35,16 @@ class Dcim(object):
         site_id = self.get_site(name=site_name)[0]['id']
         return self.netbox_con.delete('/dcim/sites/', site_id)
 
+    def update_site(self, site_name, **kwargs):
+        """
+
+        :param site_name: device-type name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        site_id = self.get_site(name=site_name)[0]['id']
+        return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
+
     def get_racks(self):
         """Returns the available racks"""
         return self.netbox_con.get('/dcim/racks/')
@@ -68,6 +78,16 @@ class Dcim(object):
         rack_id = self.get_rack(facility_id=rack_name)[0]['id']
         return self.netbox_con.delete('/dcim/racks/', rack_id)
 
+    def update_rack(self, rack_name, **kwargs):
+        """
+
+        :param rack_name: rack_name name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
+
     def get_devices(self):
         """Get all devices"""
         return self.netbox_con.get('/dcim/devices/')
@@ -80,14 +100,14 @@ class Dcim(object):
         """
         return self.netbox_con.get('/dcim/devices/', **kwargs)
 
-    def get_devices_per_rack(self, rack_name):
+    def get_devices_per_rack(self, rack_name, **kwargs):
         """Get devices which belongs to the given rack
 
         :param rack_name: Name of the rack
         :return: list of devices otherwise an empty list
         """
         rack_id = self.get_rack(facility_id=rack_name)[0]['id']
-        return self.netbox_con.get('/dcim/devices', rack_id=rack_id)
+        return self.netbox_con.get('/dcim/devices', rack_id=rack_id, **kwargs)
 
     def create_device(self, name, device_role, site_name, device_type, **kwargs):
         """Create a new device
@@ -168,7 +188,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/device-types/', required_fields, **kwargs)
 
     def update_device_type(self, device_type, **kwargs):
-        """
+        """Update device type
 
         :param device_type: device-type name to update
         :param kwargs: requests body dict
@@ -211,7 +231,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/device-roles/', required_fields, **kwargs)
 
     def update_device_role(self, device_role, **kwargs):
-        """
+        """Update device role
 
         :param device_type: device-type name to update
         :param kwargs: requests body dict
@@ -253,7 +273,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
 
     def update_manufacturer(self, manufacturer, **kwargs):
-        """
+        """Update manufacturer
 
         :param manufacturer: manufacturer name to update
         :param kwargs: requests body dict
@@ -295,7 +315,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/platforms/', required_fields, **kwargs)
 
     def update_platform(self, platform, **kwargs):
-        """
+        """Update platform
 
         :param platform: device name to update
         :param kwargs: requests body dict
@@ -347,7 +367,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
 
     def update_interface(self, interface, **kwargs):
-        """
+        """Update interface
 
         :param interface: interface to update
         :param kwargs: requests body dict
