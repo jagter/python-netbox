@@ -82,7 +82,7 @@ class NetboxConnection(object):
             else:
                 return resp_data
         else:
-            return list
+            return []
 
     def put(self, params):
         if self.auth:
@@ -92,10 +92,8 @@ class NetboxConnection(object):
     def patch(self, params, key, **kwargs):
         if self.auth:
             raise exceptions.AuthException('With basic auth the API is not writable')
-        body_data = {}
 
-        for k, v in kwargs.items():
-            body_data.update({k: v})
+        body_data = {key: value for (key, value) in kwargs.items()}
 
         resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
 
@@ -107,14 +105,10 @@ class NetboxConnection(object):
     def post(self, params, required_fields, **kwargs):
         if self.auth:
             raise exceptions.AuthException('With basic auth the API is not writable')
-        body_data = {}
-
-        for k, v in required_fields.items():
-            body_data.update({k: v})
+        body_data = {key: value for (key, value) in required_fields.items()}
 
         if kwargs:
-            for k, v in kwargs.items():
-                body_data.update({k: v})
+            body_data.update({key: value for (key, value) in kwargs.items()})
 
         resp_ok, resp_status, resp_data = self.__request('POST', params=params, body=body_data)
 
