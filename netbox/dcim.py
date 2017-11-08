@@ -1,3 +1,4 @@
+import netbox.exceptions as exceptions
 class Dcim(object):
 
     def __init__(self, netbox_con):
@@ -32,7 +33,10 @@ class Dcim(object):
         :param site_name: Site to delete
         :return: bool True if succesful otherwase delete exception
         """
-        site_id = self.get_site(name=site_name)[0]['id']
+        try:
+            site_id = self.get_site(name=site_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
         return self.netbox_con.delete('/dcim/sites/', site_id)
 
     def update_site(self, site_name, **kwargs):
@@ -42,7 +46,10 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        site_id = self.get_site(name=site_name)[0]['id']
+        try:
+            site_id = self.get_site(name=site_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
     def get_racks(self, **kwargs):
@@ -65,7 +72,10 @@ class Dcim(object):
         :param kwargs: Optional arguments
         :return: bool True if successful otherwise create exception
         """
-        site_id = self.get_site(name=site_name)[0]['id']
+        try:
+            site_id = self.get_site(name=site_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
         required_fields = {"name": name, "site": site_id}
         return self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
 
@@ -75,7 +85,10 @@ class Dcim(object):
         :param rack_name: Name of the rack to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        try:
+            rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.delete('/dcim/racks/', rack_id)
 
     def update_rack(self, rack_name, **kwargs):
@@ -85,7 +98,10 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        try:
+            rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
 
     def get_devices(self, **kwargs):
@@ -106,7 +122,10 @@ class Dcim(object):
         :param rack_name: Name of the rack
         :return: list of devices otherwise an empty list
         """
-        rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        try:
+            rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.get('/dcim/devices', rack_id=rack_id, **kwargs)
 
     def create_device(self, name, device_role, site_name, device_type, **kwargs):
@@ -120,47 +139,46 @@ class Dcim(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name}
-        device_role_id = self.get_device_role(name=device_role)[0]['id']
-        site_id = self.get_site(name=site_name)[0]['id']
-        device_type_id = self.get_device_type(model=device_type)[0]['id']
-
-        if device_role_id:
+        try:
+            device_role_id = self.get_device_role(name=device_role)[0]['id']
             required_fields.update({"device_role": device_role_id})
-        else:
-            err_msg = 'Unable to create device. device role {} not found'.format(device_role)
-            raise ValueError(err_msg)
+        except IndexError:
+            raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
 
-        if site_id:
+        try:
+            site_id = self.get_site(name=site_name)[0]['id']
             required_fields.update({"site": site_id})
-        else:
-            err_msg = 'Unable to create device. site {} not found'.format(site_name)
-            raise ValueError(err_msg)
+        except IndexError:
+            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
 
-        if device_type_id:
+        try:
+            device_type_id = self.get_device_type(model=device_type)[0]['id']
             required_fields.update({"device_type": device_type_id})
-        else:
-            err_msg = 'Unable to create device. device_type {} not found'.format(device_type)
-            raise ValueError(err_msg)
+        except IndexError:
+            raise exceptions.NotFoundException('device-type: {}'.format(device_type)) from None
 
         return self.netbox_con.post('/dcim/devices/', required_fields, **kwargs)
 
     def delete_device(self, device_name):
-        """
+        """Delete device by name
 
         :param device_name: Device to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_id = self.get_device(name=device_name)[0]['id']
+        try:
+            device_id = self.get_device(name=device_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device: {}'.format(device_name)) from None
         return self.netbox_con.delete('/dcim/devices/', device_id)
 
-    def update_device(self, device, **kwargs):
-        """
+    def update_device(self, device_name, **kwargs):
+        """Update device by device name
 
-        :param device: device name to update
+        :param device_name: device name to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_device(name=device)[0]['id']
+        device_id = self.get_device(name=device_name)[0]['id']
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
     def get_device_types(self, **kwargs):
@@ -194,8 +212,11 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_device_type(model=device_type)[0]['id']
-        return self.netbox_con.patch('/dcim/device-types/', device_id, **kwargs)
+        try:
+            device_type_id = self.get_device_type(model=device_type)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device-type: {}'.format(device_type)) from None
+        return self.netbox_con.patch('/dcim/device-types/', device_type_id, **kwargs)
 
     def delete_device_type(self, model_name):
         """Delete device type
@@ -203,7 +224,10 @@ class Dcim(object):
         :param model_name: Name of the model
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_type_id = self.get_device_type(model=model_name)[0]['id']
+        try:
+            device_type_id = self.get_device_type(model=model_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device-type: {}'.format(model_name)) from None
         return self.netbox_con.delete('/dcim/device-types/', device_type_id)
 
     def get_device_roles(self, **kwargs):
@@ -237,7 +261,10 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_role_id = self.get_device_type(name=device_role)[0]['id']
+        try:
+            device_role_id = self.get_device_type(name=device_role)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
         return self.netbox_con.patch('/dcim/device-roles/', device_role_id, **kwargs)
 
     def delete_device_role(self, device_role):
@@ -246,7 +273,10 @@ class Dcim(object):
         :param device_role: name of the role
         :return: bool True if successful otherwise raise DeleteException
         """
-        device_role_id = self.get_device_role(name=device_role)[0]['id']
+        try:
+            device_role_id = self.get_device_type(name=device_role)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
         return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
 
     def get_manufactures(self, **kwargs):
@@ -272,15 +302,18 @@ class Dcim(object):
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
 
-    def update_manufacturer(self, manufacturer, **kwargs):
+    def update_manufacturer(self, manufacturer_name, **kwargs):
         """Update manufacturer
 
-        :param manufacturer: manufacturer name to update
+        :param manufacturer_name: manufacturer name to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_role_id = self.get_manufacturer(name=manufacturer)[0]['id']
-        return self.netbox_con.patch('/dcim/manufacturer/', device_role_id, **kwargs)
+        try:
+            manufacturer_id = self.get_manufacturer(name=manufacturer_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('manufacturer: {}'.format(manufacturer_name)) from None
+        return self.netbox_con.patch('/dcim/manufacturer/', manufacturer_id, **kwargs)
 
     def delete_manufacturer(self, manufacturer_name):
         """Delete manufacturer
@@ -288,7 +321,10 @@ class Dcim(object):
         :param manufacturer_name: Name of manufacturer to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        manufacturer_id = self.get_manufacturer(name=manufacturer_name)[0]['id']
+        try:
+            manufacturer_id = self.get_manufacturer(name=manufacturer_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('manufacturer: {}'.format(manufacturer_name)) from None
         return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
 
     def get_platforms(self, **kwargs):
@@ -314,15 +350,18 @@ class Dcim(object):
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/platforms/', required_fields, **kwargs)
 
-    def update_platform(self, platform, **kwargs):
+    def update_platform(self, platform_name, **kwargs):
         """Update platform
 
         :param platform: device name to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_role_id = self.get_manufacturer(name=platform)[0]['id']
-        return self.netbox_con.patch('/dcim/platforms/', device_role_id, **kwargs)
+        try:
+            platform_id = self.get_manufacturer(name=platform_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
+        return self.netbox_con.patch('/dcim/platforms/', platform_id, **kwargs)
 
     def delete_platform(self, platform_name):
         """Delete platform
@@ -330,7 +369,10 @@ class Dcim(object):
         :param platform_name: Name of platform to delete
         :return: bool True if successful otherwise raise DeleteException
         """
-        platform_id = self.get_platform(name=platform_name)[0]['id']
+        try:
+            platform_id = self.get_manufacturer(name=platform_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
 
     def get_interfaces(self, **kwargs):
@@ -373,8 +415,11 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_role_id = self.get_manufacturer(name=interface)[0]['id']
-        return self.netbox_con.patch('/dcim/platforms/', device_role_id, **kwargs)
+        try:
+            interface_id = self.get_manufacturer(name=interface)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('interface: {}'.format(interface)) from None
+        return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
 
     def delete_interface_by_id(self, interface_id):
         """Delete interface by id
@@ -402,4 +447,3 @@ class Dcim(object):
         """
         required_fields = {"interface_a": interface_a, "interface_b": interface_b}
         return self.netbox_con.post('/dcim/interface-connections/', required_fields, **kwargs)
-
