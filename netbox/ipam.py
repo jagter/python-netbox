@@ -7,9 +7,9 @@ class Ipam(object):
 
         self.netbox_con = netbox_con
 
-    def get_ip_addresses(self):
+    def get_ip_addresses(self, **kwargs):
         """Return all ip addresses"""
-        return self.netbox_con.get('/ipam/ip-addresses/')
+        return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
 
     def get_ip(self, **kwargs):
         """Return query results"""
@@ -52,9 +52,9 @@ class Ipam(object):
         ip_address_id = self.get_ip(q=address)[0]['id']
         return self.netbox_con.delete('/ipam/ip-addresses/', ip_address_id)
 
-    def get_ip_prefixes(self):
+    def get_ip_prefixes(self, **kwargs):
         """Return all ip prefixes"""
-        return self.netbox_con.get('/ipam/prefixes/')
+        return self.netbox_con.get('/ipam/prefixes/', **kwargs)
 
     def get_ip_prefix(self, **kwargs):
         """Get prefix based on filter values
@@ -105,9 +105,9 @@ class Ipam(object):
         param = '/ipam/prefixes/{}/available-ips/'.format(prefix_id)
         return self.netbox_con.get(param, limit=1)[0]['address']
 
-    def get_vrfs(self):
+    def get_vrfs(self, **kwargs):
         """Get all vrfs"""
-        return self.netbox_con.get('/ipam/vrfs/')
+        return self.netbox_con.get('/ipam/vrfs/', **kwargs)
 
     def get_vrf(self, **kwargs):
         """Get vrf based on filter values
@@ -147,9 +147,9 @@ class Ipam(object):
         vrf_id = self.get_vrf(name=vrf_name)[0]['id']
         return self.netbox_con.patch('/ipam/vrfs/', vrf_id, **kwargs)
 
-    def get_aggregates(self):
+    def get_aggregates(self, **kwargs):
         """Return all aggregates"""
-        return self.netbox_con.get('/ipam/aggregates/')
+        return self.netbox_con.get('/ipam/aggregates/', **kwargs)
 
     def get_aggregate(self, **kwargs):
         """Return aggregate
@@ -182,9 +182,9 @@ class Ipam(object):
         aggregate_id = self.get_aggregate(prefix=prefix)[0]['id']
         return self.netbox_con.patch('/ipam/aggregates/', aggregate_id, **kwargs)
 
-    def get_rirs(self):
+    def get_rirs(self, **kwargs):
         """Return all rirs"""
-        return self.netbox_con.get('/ipam/rirs/')
+        return self.netbox_con.get('/ipam/rirs/', **kwargs)
 
     def get_rir(self, **kwargs):
         """Get rir based on filter values
@@ -223,9 +223,9 @@ class Ipam(object):
         rir_id = self.get_rir(name=name)[0]['id']
         return self.netbox_con.patch('/ipam/rirs/', rir_id, **kwargs)
 
-    def get_prefix_roles(self):
+    def get_prefix_roles(self, **kwargs):
         """Return all roles"""
-        return self.netbox_con.get('/ipam/roles/')
+        return self.netbox_con.get('/ipam/roles/', **kwargs)
 
     def get_prefix_role(self, **kwargs):
         """Return prefix role based on filter
@@ -264,9 +264,9 @@ class Ipam(object):
         prefix_role_id = self.get_prefix_role(name=name)[0]['id']
         return self.netbox_con.patch('/ipam/roles/', prefix_role_id, **kwargs)
 
-    def get_vlans(self):
+    def get_vlans(self, **kwargs):
         """Return all vlans"""
-        return self.netbox_con.get('/ipam/vlans/')
+        return self.netbox_con.get('/ipam/vlans/', **kwargs)
 
     def get_vlan(self, **kwargs):
         """Get vlan by filter

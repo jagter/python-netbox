@@ -3,9 +3,9 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
-    def get_sites(self):
+    def get_sites(self, **kwargs):
         """Returns the available sites"""
-        return self.netbox_con.get('/dcim/sites/')
+        return self.netbox_con.get('/dcim/sites/', **kwargs)
 
     def get_site(self, **kwargs):
         """Get site by filter
@@ -45,9 +45,9 @@ class Dcim(object):
         site_id = self.get_site(name=site_name)[0]['id']
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
-    def get_racks(self):
+    def get_racks(self, **kwargs):
         """Returns the available racks"""
-        return self.netbox_con.get('/dcim/racks/')
+        return self.netbox_con.get('/dcim/racks/', **kwargs)
 
     def get_rack(self, **kwargs):
         """Return rack id based on name
@@ -88,9 +88,9 @@ class Dcim(object):
         rack_id = self.get_rack(facility_id=rack_name)[0]['id']
         return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
 
-    def get_devices(self):
+    def get_devices(self, **kwargs):
         """Get all devices"""
-        return self.netbox_con.get('/dcim/devices/')
+        return self.netbox_con.get('/dcim/devices/', **kwargs)
 
     def get_device(self, **kwargs):
         """Get device by filter
@@ -163,9 +163,9 @@ class Dcim(object):
         device_id = self.get_device(name=device)[0]['id']
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
-    def get_device_types(self):
+    def get_device_types(self, **kwargs):
         """Get devices by device type"""
-        return self.netbox_con.get('/dcim/device-types/')
+        return self.netbox_con.get('/dcim/device-types/', **kwargs)
 
     def get_device_type(self, **kwargs):
         """Get device type by filter
@@ -206,9 +206,9 @@ class Dcim(object):
         device_type_id = self.get_device_type(model=model_name)[0]['id']
         return self.netbox_con.delete('/dcim/device-types/', device_type_id)
 
-    def get_device_roles(self):
+    def get_device_roles(self, **kwargs):
         """Return all the device roles"""
-        return self.netbox_con.get('/dcim/device-roles/')
+        return self.netbox_con.get('/dcim/device-roles/', **kwargs)
 
     def get_device_role(self, **kwargs):
         """Get device role by filter
@@ -249,9 +249,9 @@ class Dcim(object):
         device_role_id = self.get_device_role(name=device_role)[0]['id']
         return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
 
-    def get_manufactures(self):
+    def get_manufactures(self, **kwargs):
         """Return all manufactures"""
-        return self.netbox_con.get('/dcim/manufacturers/')
+        return self.netbox_con.get('/dcim/manufacturers/', **kwargs)
 
     def get_manufacturer(self, **kwargs):
         """Get manufacturer by filter
@@ -291,9 +291,9 @@ class Dcim(object):
         manufacturer_id = self.get_manufacturer(name=manufacturer_name)[0]['id']
         return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
 
-    def get_platforms(self):
+    def get_platforms(self, **kwargs):
         """Return all platforms"""
-        return self.netbox_con.get('/dcim/platforms')
+        return self.netbox_con.get('/dcim/platforms', **kwargs)
 
     def get_platform(self, **kwargs):
         """Get platform by filter
@@ -333,9 +333,9 @@ class Dcim(object):
         platform_id = self.get_platform(name=platform_name)[0]['id']
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
 
-    def get_interfaces(self):
+    def get_interfaces(self, **kwargs):
         """Return interfaces"""
-        return self.netbox_con.get('/dcim/interfaces')
+        return self.netbox_con.get('/dcim/interfaces', **kwargs)
 
     def get_interface(self, **kwargs):
         """Get interface by filter
@@ -345,13 +345,13 @@ class Dcim(object):
         """
         return self.netbox_con.get('/dcim/interfaces/', **kwargs)
 
-    def get_interfaces_by_device(self, device_name):
+    def get_interfaces_by_device(self, device_name, **kwargs):
         """Get all interfaces by device
 
         :param device_name: Name of device to get interfaces off
         :return: list of interfaces
         """
-        return self.netbox_con.get('/dcim/interfaces', device=device_name)
+        return self.netbox_con.get('/dcim/interfaces', device=device_name, **kwargs)
 
     def create_interface(self, name, form_facter, device, **kwargs):
         """Create a new interface
