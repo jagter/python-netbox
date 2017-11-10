@@ -11,10 +11,6 @@ class Ipam(object):
         """Return all ip addresses"""
         return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
 
-    def get_ip(self, **kwargs):
-        """Return query results"""
-        return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
-
     def get_ip_by_device(self, device_name):
         """Get IPs which are associated to a device
 
@@ -41,7 +37,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            ip_id = self.get_ip(q=ip_address)[0]['id']
+            ip_id = self.get_ip_addresses(q=ip_address)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip: {}'.format(ip_address)) from None
         return self.netbox_con.patch('/ipam/ip-addresses/', ip_id, **kwargs)
@@ -49,25 +45,17 @@ class Ipam(object):
     def delete_ip_address(self, ip_address):
         """Delete IP address
 
-        :param address: IP address to delete
+        :param ip_address: IP address to delete
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            ip_id = self.get_ip(q=ip_address)[0]['id']
+            ip_id = self.get_ip_addresses(q=ip_address)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip: {}'.format(ip_address)) from None
         return self.netbox_con.delete('/ipam/ip-addresses/', ip_id)
 
     def get_ip_prefixes(self, **kwargs):
         """Return all ip prefixes"""
-        return self.netbox_con.get('/ipam/prefixes/', **kwargs)
-
-    def get_ip_prefix(self, **kwargs):
-        """Get prefix based on filter values
-
-        :param kwargs: filter values
-        :return: prefix
-        """
         return self.netbox_con.get('/ipam/prefixes/', **kwargs)
 
     def create_ip_prefix(self, prefix, **kwargs):
@@ -89,7 +77,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            ip_prefix_id = self.get_ip_prefix(**kwargs)[0]['id']
+            ip_prefix_id = self.get_ip_prefixes(**kwargs)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip-prefix') from None
         return self.netbox_con.delete('/ipam/prefixes/', ip_prefix_id)
@@ -102,7 +90,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            ip_prefix_id = self.get_ip_prefix(q=ip_prefix)[0]['id']
+            ip_prefix_id = self.get_ip_prefixes(q=ip_prefix)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip-prefix: {}'.format(ip_prefix)) from None
         return self.netbox_con.patch('/ipam/prefixes/', ip_prefix_id, **kwargs)
@@ -114,7 +102,7 @@ class Ipam(object):
         :return: next available ip
         """
         try:
-            prefix_id =  self.get_ip_prefix(**kwargs)[0]['id']
+            prefix_id =  self.get_ip_prefixes(**kwargs)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip-prefix') from None
 
@@ -123,14 +111,6 @@ class Ipam(object):
 
     def get_vrfs(self, **kwargs):
         """Get all vrfs"""
-        return self.netbox_con.get('/ipam/vrfs/', **kwargs)
-
-    def get_vrf(self, **kwargs):
-        """Get vrf based on filter values
-
-        :param kwargs: Filter values
-        :return: vrf
-        """
         return self.netbox_con.get('/ipam/vrfs/', **kwargs)
 
     def create_vrf(self, name, rd, **kwargs):
@@ -147,11 +127,11 @@ class Ipam(object):
     def delete_vrf(self, vrf_name):
         """Delete vrf
 
-        :param vrf: Name of vrf to delete
+        :param vrf_name: Name of vrf to delete
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            vrf_id = self.get_vrf(name=vrf_name)[0]['id']
+            vrf_id = self.get_vrfs(name=vrf_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('vrf: {}'.format(vrf_name)) from None
         return self.netbox_con.delete('/ipam/vrfs/', vrf_id)
@@ -164,7 +144,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            vrf_id = self.get_vrf(name=vrf_name)[0]['id']
+            vrf_id = self.get_vrfs(name=vrf_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('vrf: {}'.format(vrf_name)) from None
         return self.netbox_con.patch('/ipam/vrfs/', vrf_id, **kwargs)
@@ -172,13 +152,6 @@ class Ipam(object):
     def get_aggregates(self, **kwargs):
         """Return all aggregates"""
         return self.netbox_con.get('/ipam/aggregates/', **kwargs)
-
-    def get_aggregate(self, **kwargs):
-        """Return aggregate
-
-        :param kwargs: arguments
-        :return: aggregate
-        """
 
     def create_aggregate(self, prefix, rir, **kwargs):
         """Creates a new aggregate
@@ -188,7 +161,7 @@ class Ipam(object):
         :param kwargs: Optional Arguments
         :return:
         """
-        rir_id = self.get_rir(name=rir)[0]['id']
+        rir_id = self.get_rirs(name=rir)[0]['id']
         required_fields = {"prefix": prefix, "rir": rir_id}
 
         if ipaddress.ip_network(prefix, strict=True):
@@ -202,7 +175,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            aggregate_id = self.get_aggregate(prefix=prefix)[0]['id']
+            aggregate_id = self.get_aggregates(prefix=prefix)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('aggregate: {}'.format(prefix)) from None
         return self.netbox_con.patch('/ipam/aggregates/', aggregate_id, **kwargs)
@@ -210,14 +183,6 @@ class Ipam(object):
     def get_rirs(self, **kwargs):
         """Return all rirs"""
         return self.netbox_con.get('/ipam/rirs/', **kwargs)
-
-    def get_rir(self, **kwargs):
-        """Get rir based on filter values
-
-        :param kwargs: Filter values
-        :return: rir
-        """
-        return self.netbox_con.get('/ipam/rirs', **kwargs)
 
     def create_rir(self, name, slug):
         """Create new rir
@@ -236,7 +201,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            rir_id = self.get_rir(name=rir_name)[0]['id']
+            rir_id = self.get_rirs(name=rir_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rir: {}'.format(rir_name)) from None
         return self.netbox_con.delete('/ipam/rirs/', rir_id)
@@ -249,21 +214,13 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            rir_id = self.get_rir(name=rir_name)[0]['id']
+            rir_id = self.get_rirs(name=rir_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rir: {}'.format(rir_name)) from None
         return self.netbox_con.patch('/ipam/rirs/', rir_id, **kwargs)
 
     def get_prefix_roles(self, **kwargs):
         """Return all roles"""
-        return self.netbox_con.get('/ipam/roles/', **kwargs)
-
-    def get_prefix_role(self, **kwargs):
-        """Return prefix role based on filter
-
-        :param kwargs: filter options
-        :return: prefix role
-        """
         return self.netbox_con.get('/ipam/roles/', **kwargs)
 
     def create_prefix_role(self, name, slug):
@@ -279,11 +236,11 @@ class Ipam(object):
     def delete_prefix_role(self, prefix_role_name):
         """Delete prefix role
 
-        :param prefix_role: prefix role to delete
+        :param prefix_role_name: prefix role to delete
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            prefix_role_id = self.get_prefix_role(name=prefix_role_name)[0]['id']
+            prefix_role_id = self.get_prefix_roles(name=prefix_role_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('prefix-role: {}'.format(prefix_role_name)) from None
         return self.netbox_con.delete('/ipam/role/', prefix_role_id)
@@ -291,26 +248,18 @@ class Ipam(object):
     def update_prefix_role(self, prefix_role_name, **kwargs):
         """Update prefix role
 
-        :param name: Name of the prefix role
+        :param prefix_role_name: Name of the prefix role
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            prefix_role_id = self.get_prefix_role(name=prefix_role_name)[0]['id']
+            prefix_role_id = self.get_prefix_roles(name=prefix_role_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('prefix-role: {}'.format(prefix_role_name)) from None
         return self.netbox_con.patch('/ipam/roles/', prefix_role_id, **kwargs)
 
     def get_vlans(self, **kwargs):
         """Return all vlans"""
-        return self.netbox_con.get('/ipam/vlans/', **kwargs)
-
-    def get_vlan(self, **kwargs):
-        """Get vlan by filter
-
-        :param kwargs: Filter values
-        :return: vlan
-        """
         return self.netbox_con.get('/ipam/vlans/', **kwargs)
 
     def create_vlan(self, vid, vlan_name):
@@ -330,7 +279,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            vid_id = self.get_vlan(vid=vid)[0]['id']
+            vid_id = self.get_vlans(vid=vid)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('vlan: {}'.format(vid)) from None
         return self.netbox_con.delete('/ipam/vlans/', vid_id)
@@ -343,7 +292,46 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            vlan_id = self.get_vlan(name=vlan_name)[0]['id']
+            vlan_id = self.get_vlans(name=vlan_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('vlan: {}'.format(vlan_name)) from None
         return self.netbox_con.patch('/ipam/vlans/', vlan_id, **kwargs)
+
+    def get_vlan_groups(self, **kwargs):
+        """Return all vlans"""
+        return self.netbox_con.get('/ipam/vlan-groups/', **kwargs)
+
+    def create_vlan_group(self, name, slug):
+        """Create new vlan-group
+
+        :param name: name of the vlan group
+        :param slug: slug
+        :return: bool True if successful otherwise raise CreateException
+        """
+        required_fields = {"name": name, "slug": slug}
+        return self.netbox_con.post('/ipam/vlan-groups/', required_fields)
+
+    def delete_vlan_group(self, name):
+        """Delete VLAN group
+
+        :param name: name of the vlan-group to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            vgrp_id = self.get_vlan_groups(name=name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('vlan: {}'.format(vgrp_id)) from None
+        return self.netbox_con.delete('/ipam/vlan-groups/', vgrp_id)
+
+    def update_vlan_group(self, name, **kwargs):
+        """Update vlan-group
+
+        :param name: name of the vlan-group
+        :param kwargs: arguments
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        try:
+            vgrp_ip = self.get_vlan_groups(name=name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('name: {}'.format(vgrp_ip)) from None
+        return self.netbox_con.patch('/ipam/vlan-groups/', vgrp_ip, **kwargs)
