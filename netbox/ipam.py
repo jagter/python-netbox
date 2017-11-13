@@ -1,6 +1,7 @@
 import ipaddress
 from netbox import exceptions
 
+
 class Ipam(object):
 
     def __init__(self, netbox_con):
@@ -102,7 +103,7 @@ class Ipam(object):
         :return: next available ip
         """
         try:
-            prefix_id =  self.get_ip_prefixes(**kwargs)[0]['id']
+            prefix_id = self.get_ip_prefixes(**kwargs)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip-prefix') from None
 
@@ -320,7 +321,7 @@ class Ipam(object):
         try:
             vgrp_id = self.get_vlan_groups(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('vlan: {}'.format(vgrp_id)) from None
+            raise exceptions.NotFoundException('vlan: {}'.format(name)) from None
         return self.netbox_con.delete('/ipam/vlan-groups/', vgrp_id)
 
     def update_vlan_group(self, name, **kwargs):
@@ -333,5 +334,5 @@ class Ipam(object):
         try:
             vgrp_ip = self.get_vlan_groups(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('name: {}'.format(vgrp_ip)) from None
+            raise exceptions.NotFoundException('name: {}'.format(name)) from None
         return self.netbox_con.patch('/ipam/vlan-groups/', vgrp_ip, **kwargs)
