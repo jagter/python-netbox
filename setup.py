@@ -11,7 +11,7 @@ def readme():
         return f.read()
 
 setup(name='python-netbox',
-      version='0.0.4',
+      version='0.0.5',
       description='Python NetBox Client',
       long_description=readme(),
       python_requires='>=3',
