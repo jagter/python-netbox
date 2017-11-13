@@ -1,4 +1,6 @@
 import netbox.exceptions as exceptions
+
+
 class Dcim(object):
 
     def __init__(self, netbox_con):
@@ -70,7 +72,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            rack_id = self.get_rack(facility_id=rack_name)[0]['id']
+            rack_id = self.get_racks(facility_id=rack_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.delete('/dcim/racks/', rack_id)
@@ -116,7 +118,7 @@ class Dcim(object):
         """
         required_fields = {"name": name}
         try:
-            device_role_id = self.get_device_role(name=device_role)[0]['id']
+            device_role_id = self.get_device_roles(name=device_role)[0]['id']
             required_fields.update({"device_role": device_role_id})
         except IndexError:
             raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
@@ -128,7 +130,7 @@ class Dcim(object):
             raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
 
         try:
-            device_type_id = self.get_device_type(model=device_type)[0]['id']
+            device_type_id = self.get_device_types(model=device_type)[0]['id']
             required_fields.update({"device_type": device_type_id})
         except IndexError:
             raise exceptions.NotFoundException('device-type: {}'.format(device_type)) from None
@@ -217,7 +219,7 @@ class Dcim(object):
     def update_device_role(self, device_role, **kwargs):
         """Update device role
 
-        :param device_type: device-type name to update
+        :param device_role: device-type name to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -297,7 +299,7 @@ class Dcim(object):
     def update_platform(self, platform_name, **kwargs):
         """Update platform
 
-        :param platform: device name to update
+        :param platform_name: device name to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
