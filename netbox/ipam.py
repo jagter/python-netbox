@@ -263,7 +263,7 @@ class Ipam(object):
         """Return all vlans"""
         return self.netbox_con.get('/ipam/vlans/', **kwargs)
 
-    def create_vlan(self, vid, vlan_name):
+    def create_vlan(self, vid, vlan_name, **kwargs):
         """Create new vlan
 
         :param vid: ID of the new vlan
@@ -271,7 +271,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"vid": vid, "name": vlan_name}
-        return self.netbox_con.post('/ipam/vlans/', required_fields)
+        return self.netbox_con.post('/ipam/vlans/', required_fields, **kwargs)
 
     def delete_vlan(self, vid):
         """Delete VLAN based on VLAN ID
