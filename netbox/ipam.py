@@ -99,7 +99,7 @@ class Ipam(object):
     def get_next_available_ip(self, **kwargs):
         """Return next available ip in prefix
 
-        :param kwargs: filter for prefix
+        :param kwargs: Use the filter fields from the get_prefixes call
         :return: next available ip
         """
         try:
@@ -220,43 +220,43 @@ class Ipam(object):
             raise exceptions.NotFoundException('rir: {}'.format(rir_name)) from None
         return self.netbox_con.patch('/ipam/rirs/', rir_id, **kwargs)
 
-    def get_prefix_roles(self, **kwargs):
+    def get_roles(self, **kwargs):
         """Return all roles"""
         return self.netbox_con.get('/ipam/roles/', **kwargs)
 
-    def create_prefix_role(self, name, slug):
-        """Create new prefix role
+    def create_role(self, name, slug, **kwargs):
+        """Create new prefix/vlan role
 
-        :param name: Name of the prefix role
+        :param name: Name of the prefix/vlan role
         :param slug: Name of the slug
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
-        return self.netbox_con.post('/ipam/roles/', required_fields)
+        return self.netbox_con.post('/ipam/roles/', required_fields, **kwargs)
 
-    def delete_prefix_role(self, prefix_role_name):
-        """Delete prefix role
+    def delete_role(self, role_name):
+        """Delete prefix/vlan role
 
-        :param prefix_role_name: prefix role to delete
+        :param role_name: prefix/vlan role to delete
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            prefix_role_id = self.get_prefix_roles(name=prefix_role_name)[0]['id']
+            role_id = self.get_roles(name=role_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('prefix-role: {}'.format(prefix_role_name)) from None
-        return self.netbox_con.delete('/ipam/role/', prefix_role_id)
+            raise exceptions.NotFoundException('prefix/vlan role: {}'.format(role_name)) from None
+        return self.netbox_con.delete('/ipam/role/', role_id)
 
-    def update_prefix_role(self, prefix_role_name, **kwargs):
+    def update_role(self, role_name, **kwargs):
         """Update prefix role
 
-        :param prefix_role_name: Name of the prefix role
+        :param role_name: Name of the prefix/vlan role
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            prefix_role_id = self.get_prefix_roles(name=prefix_role_name)[0]['id']
+            prefix_role_id = self.get_roles(name=role_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('prefix-role: {}'.format(prefix_role_name)) from None
+            raise exceptions.NotFoundException('prefix/vlan role: {}'.format(role_name)) from None
         return self.netbox_con.patch('/ipam/roles/', prefix_role_id, **kwargs)
 
     def get_vlans(self, **kwargs):
@@ -268,6 +268,7 @@ class Ipam(object):
 
         :param vid: ID of the new vlan
         :param vlan_name: Name of the vlan
+        :param kwargs: Optional Arguments
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"vid": vid, "name": vlan_name}
@@ -302,15 +303,16 @@ class Ipam(object):
         """Return all vlans"""
         return self.netbox_con.get('/ipam/vlan-groups/', **kwargs)
 
-    def create_vlan_group(self, name, slug):
+    def create_vlan_group(self, name, slug, **kwargs):
         """Create new vlan-group
 
         :param name: name of the vlan group
         :param slug: slug
+        :param kwargs: Optional Arguments
         :return: bool True if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
-        return self.netbox_con.post('/ipam/vlan-groups/', required_fields)
+        return self.netbox_con.post('/ipam/vlan-groups/', required_fields, **kwargs)
 
     def delete_vlan_group(self, name):
         """Delete VLAN group
