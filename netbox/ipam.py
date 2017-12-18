@@ -18,7 +18,15 @@ class Ipam(object):
         :param device_name: Name of the device
         :return: ip address information
         """
-        return self.netbox_con.get('/ipam/ip-addresses', device_name=device_name)
+        return self.netbox_con.get('/ipam/ip-addresses', device=device_name)
+
+    def get_ip_by_virtual_machine(self, vm_name):
+        """Get IPs which are associated to a device
+
+        :param vm_name: Name of the virtual machine
+        :return: ip address information
+        """
+        return self.netbox_con.get('/ipam/ip-addresses', virtual_machine=vm_name)
 
     def create_ip_address(self, address, **kwargs):
         """Create a new ip address
