@@ -15,7 +15,7 @@ Installation
 
 To get the latest version from Github:
 
-   $ pip install -e git+https://github.com/jagter/python-netbox.git#egg=python-netbox
+   $ pip install python-netbox
 
 -----------------
 Usage
