@@ -94,15 +94,14 @@ class Dcim(object):
         """Get all devices"""
         return self.netbox_con.get('/dcim/devices/', **kwargs)
 
-    def get_devices_per_rack(self, rack_name, site_slug, **kwargs):
+    def get_devices_per_rack(self, rack_name, **kwargs):
         """Get devices which belongs to the given rack
 
         :param rack_name: Name of the rack
-        :param site_slug: Slug of the site
         :return: list of devices otherwise an empty list
         """
         try:
-            rack_id = self.get_racks(site=site_slug, q=rack_name)[0]['id']
+            rack_id = self.get_racks(name=rack_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.get('/dcim/devices', rack_id=rack_id, **kwargs)
