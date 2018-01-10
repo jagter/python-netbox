@@ -363,7 +363,7 @@ class Dcim(object):
         """Delete interface by id
 
         :param interface_id: id of interface to remove
-        :return:
+        :return: bool True if successful otherwise raise DeleteException
         """
         return self.netbox_con.delete('/dcim/interfaces/', interface_id)
 
@@ -385,3 +385,11 @@ class Dcim(object):
         """
         required_fields = {"interface_a": interface_a, "interface_b": interface_b}
         return self.netbox_con.post('/dcim/interface-connections/', required_fields, **kwargs)
+
+    def delete_interface_connection(self, interface_connection_id):
+        """Delete interface by id
+
+        :param interface_connection_id: id of interface to remove
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/interface-connections/', interface_connection_id)
