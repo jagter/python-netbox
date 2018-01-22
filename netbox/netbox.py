@@ -2,6 +2,7 @@ import netbox.connection as connection
 import netbox.dcim as dcim
 import netbox.ipam as ipam
 import netbox.virtualization as virtualization
+import netbox.exceptions as exceptions
 
 
 class NetBox(object):
@@ -10,3 +11,4 @@ class NetBox(object):
         self.ipam = ipam.Ipam(self.connection)
         self.dcim = dcim.Dcim(self.connection)
         self.virtualization = virtualization.Virtualization(self.connection)
+        self.exceptions = exceptions
