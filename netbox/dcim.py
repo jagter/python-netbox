@@ -304,7 +304,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            platform_id = self.get_manufacturers(name=platform_name)[0]['id']
+            platform_id = self.get_platforms(name=platform_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
         return self.netbox_con.patch('/dcim/platforms/', platform_id, **kwargs)
@@ -316,7 +316,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            platform_id = self.get_manufacturers(name=platform_name)[0]['id']
+            platform_id = self.get_platforms(name=platform_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
@@ -333,28 +333,29 @@ class Dcim(object):
         """
         return self.netbox_con.get('/dcim/interfaces', device=device_name, **kwargs)
 
-    def create_interface(self, name, form_facter, device, **kwargs):
+    def create_interface(self, name, form_factor, device, **kwargs):
         """Create a new interface
 
         :param name: name of the interface
-        :param form_facter: interface type. It is not possible to get the list of form factors from the api. Search
+        :param form_factor: interface type. It is not possible to get the list of form factors from the api. Search
         in the netbox code for the correct form factor number.
         :param kwargs: optional arguments
         :param device: name of the device to associate interface with
         :return: bool True if successful otherwise raise CreateException
         """
-        required_fields = {"name": name, "form_factor": form_facter, "device": device}
+        required_fields = {"name": name, "form_factor": form_factor, "device": device}
         return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
 
-    def update_interface(self, interface, **kwargs):
+    def update_interface(self, interface, device, **kwargs):
         """Update interface
 
         :param interface: interface to update
+        :param device: name of the device
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            interface_id = self.get_manufacturers(name=interface)[0]['id']
+            interface_id = self.get_interfaces(name=interface, device=device)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface: {}'.format(interface)) from None
         return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
