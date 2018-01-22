@@ -333,17 +333,17 @@ class Dcim(object):
         """
         return self.netbox_con.get('/dcim/interfaces', device=device_name, **kwargs)
 
-    def create_interface(self, name, form_factor, device, **kwargs):
+    def create_interface(self, name, form_factor, device_id, **kwargs):
         """Create a new interface
 
         :param name: name of the interface
         :param form_factor: interface type. It is not possible to get the list of form factors from the api. Search
         in the netbox code for the correct form factor number.
         :param kwargs: optional arguments
-        :param device: name of the device to associate interface with
+        :param device_id: ID of the device to associate interface with
         :return: bool True if successful otherwise raise CreateException
         """
-        required_fields = {"name": name, "form_factor": form_factor, "device": device}
+        required_fields = {"name": name, "form_factor": form_factor, "device": device_id}
         return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
 
     def update_interface(self, interface, device, **kwargs):
