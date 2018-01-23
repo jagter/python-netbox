@@ -325,14 +325,6 @@ class Dcim(object):
         """Return interfaces"""
         return self.netbox_con.get('/dcim/interfaces', **kwargs)
 
-    def get_interfaces_by_device(self, device_name, **kwargs):
-        """Get all interfaces by device
-
-        :param device_name: Name of device to get interfaces off
-        :return: list of interfaces
-        """
-        return self.netbox_con.get('/dcim/interfaces', device=device_name, **kwargs)
-
     def create_interface(self, name, form_factor, device_id, **kwargs):
         """Create a new interface
 
@@ -360,12 +352,17 @@ class Dcim(object):
             raise exceptions.NotFoundException('interface: {}'.format(interface)) from None
         return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
 
-    def delete_interface_by_id(self, interface_id):
-        """Delete interface by id
+    def delete_interface(self, interface_name, device):
+        """Delete platform
 
-        :param interface_id: id of interface to remove
+        :param interface_name: Name of interface to delete
+        :param device: Device to which the interface belongs
         :return: bool True if successful otherwise raise DeleteException
         """
+        try:
+            interface_id = self.get_interfaces(name=interface_name, device=device)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('interface: {}'.format(interface_name)) from None
         return self.netbox_con.delete('/dcim/interfaces/', interface_id)
 
     def get_interface_connections(self, **kwargs):
