@@ -63,6 +63,14 @@ class Ipam(object):
             raise exceptions.NotFoundException('ip: {}'.format(ip_address)) from None
         return self.netbox_con.delete('/ipam/ip-addresses/', ip_id)
 
+    def delete_ip_by_id(self, ip_id):
+        """Delete IP address
+
+        :param ip_id: ID of ip address to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/ipam/ip-addresses/', ip_id)
+
     def get_ip_prefixes(self, **kwargs):
         """Return all ip prefixes"""
         return self.netbox_con.get('/ipam/prefixes/', **kwargs)
