@@ -45,3 +45,43 @@ class Tenancy(object):
         except IndexError:
             raise exceptions.NotFoundException('tenant: {}'.format(tenant_name)) from None
         return self.netbox_con.patch('/tenancy/tenants/', tenant_id, **kwargs)
+
+    def get_tenant_groups(self, **kwargs):
+        """Returns the tenant groups"""
+        return self.netbox_con.get('/tenancy/tenant-groups/', **kwargs)
+
+    def create_tenant_group(self, name, slug, **kwargs):
+        """Create a new tenant-group
+
+        :param name: Tenant-group name
+        :param slug: slug name
+        :param kwargs: optional fields
+        :return: bool True if successful otherwise exception raised
+        """
+        required_fields = {"name": name, "slug": slug}
+        return self.netbox_con.post('/tenancy/tenant-groups/', required_fields, **kwargs)
+
+    def delete_tenant_group(self, tenant_group_name):
+        """Delete tenant
+
+        :param tenant_group_name: Tenant group to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        try:
+            tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('tenant: {}'.format(tenant_group_name)) from None
+        return self.netbox_con.delete('/tenancy/tenant-groups/', tenant_group_id)
+
+    def update_tenant_group(self, tenant_group_name, **kwargs):
+        """Update tenant group
+
+        :param tenant_group_name: tenant group to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        try:
+            tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('tenant-group: {}'.format(tenant_group_name)) from None
+        return self.netbox_con.patch('/tenancy/tenant-groups/', tenant_group_id, **kwargs)
