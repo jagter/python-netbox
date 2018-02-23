@@ -60,11 +60,6 @@ class Virtualization(object):
         """Return all cluster types"""
         return self.netbox_con.get('/virtualization/cluster-types/', **kwargs)
 
-    def get_cluster_type(self, name):
-        """Return single cluster type by name"""
-        cluster_type = ([item for (item) in self.get_cluster_types() if name in item['name']])
-        return cluster_type
-
     def create_cluster_type(self, name, slug):
         """Create a new cluster type
 
