@@ -11,7 +11,7 @@ class Dcim(object):
         return self.netbox_con.get('/dcim/sites/', **kwargs)
 
     def create_site(self, name, slug, **kwargs):
-        """Create new site
+        """Create a new site
 
         :param name: Site name
         :param slug: slug name
@@ -36,7 +36,7 @@ class Dcim(object):
     def update_site(self, site_name, **kwargs):
         """
 
-        :param site_name: device-type name to update
+        :param site_name: Site to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
