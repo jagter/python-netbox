@@ -353,7 +353,7 @@ class Dcim(object):
         return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
 
     def delete_interface(self, interface_name, device):
-        """Delete platform
+        """Delete interface
 
         :param interface_name: Name of interface to delete
         :param device: Device to which the interface belongs
@@ -400,3 +400,47 @@ class Dcim(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         return self.netbox_con.patch('/dcim/interface-connections/', interface_connection_id, **kwargs)
+
+    def get_interface_templates(self, **kwargs):
+        """Return interface templates"""
+        return self.netbox_con.get('/dcim/interface-templates', **kwargs)
+
+    def create_interface_template(self, name, device_type, **kwargs):
+        """Create a new interface template
+
+        :param name: name of the interface
+        :param kwargs: optional arguments
+        :param device_type: name of the device_type to associate template with
+        :return: bool True if successful otherwise raise CreateException
+        """
+        try:
+            device_type_id = self.get_device_types(model=device_type)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device-type: {}'.format(device_type)) from None
+        required_fields = {"name": name, "device_type": device_type_id}
+        return self.netbox_con.post('/dcim/interface-templates/', required_fields, **kwargs)
+
+    def update_interface_template(self, interface_template_name, **kwargs):
+        """Update interface template
+
+        :param interface_template_name: interface template to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        try:
+            interface_template_id = self.get_interface_templates(name=interface_template_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('interface: {}'.format(interface_template_name)) from None
+        return self.netbox_con.patch('/dcim/interface-templates/', interface_template_id **kwargs)
+
+    def delete_interface_template(self, interface_template_name):
+        """Delete interface template
+
+        :param interface_template_name: Name of interface template to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            interface_template_id = self.get_interface_templates(name=interface_template_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('interface-template: {}'.format(interface_template_name)) from None
+        return self.netbox_con.delete('/dcim/interface-templates/', interface_template_id)
