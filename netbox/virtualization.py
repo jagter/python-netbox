@@ -16,7 +16,8 @@ class Virtualization(object):
         """
         return self.netbox_con.get('/virtualization/clusters/', **kwargs)
 
-    def create_cluster(self, name, type, **kwargs):
+    # https://github.com/digitalocean/netbox/issues/1910
+    def create_cluster(self, name, type_id, **kwargs):
         """Create a new cluster
 
         :param name: name of the cluster
@@ -24,10 +25,6 @@ class Virtualization(object):
         :param kwargs: optional arguments
         :return: bool True if successful otherwise exception raised
         """
-        try:
-            type_id = self.get_cluster_type(type)[0]['id']
-        except IndexError:
-            raise exceptions.NotFoundException('type: {} or name: {}'.format(type, name)) from None
         required_fields = {"name": name, "type": type_id}
         return self.netbox_con.post('/virtualization/clusters/', required_fields, **kwargs)
 
