@@ -8,14 +8,6 @@ class Virtualization(object):
         """Return all clusters"""
         return self.netbox_con.get('/virtualization/clusters/', **kwargs)
 
-    def get_cluster(self, **kwargs):
-        """Return the cluster by filter
-
-        :param kwargs: filter options
-        :return: cluster
-        """
-        return self.netbox_con.get('/virtualization/clusters/', **kwargs)
-
     # https://github.com/digitalocean/netbox/issues/1910
     def create_cluster(self, name, type_id, **kwargs):
         """Create a new cluster
