@@ -88,9 +88,9 @@ class Virtualization(object):
         """Return all interfaces"""
         return self.netbox_con.get('/virtualization/interfaces/', **kwargs)
 
-    def get_interface(self, interface_id, **kwargs):
-        """Return interface by id"""
-        return self.netbox_con.get('/virtualization/interfaces/' + str(interface_id) + '/', **kwargs)
+    def get_interface(self, **kwargs):
+        """Return interface by filter"""
+        return self.netbox_con.get('/virtualization/interfaces/', **kwargs)
 
     def create_interface(self, name, virtual_machine, **kwargs):
         """Create an interface for a virtual machine
