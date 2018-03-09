@@ -325,6 +325,10 @@ class Dcim(object):
         """Return interfaces"""
         return self.netbox_con.get('/dcim/interfaces', **kwargs)
 
+    def get_interface(self, interface_id, **kwargs):
+        """Return interface by id"""
+        return self.netbox_con.get('/dcim/interfaces/' + str(interface_id) + '/', **kwargs)
+
     def create_interface(self, name, form_factor, device_id, **kwargs):
         """Create a new interface
 
