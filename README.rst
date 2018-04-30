@@ -3,7 +3,7 @@ Python Netbox Client
 ============================
 
 python-netbox is a client for the Netbox (https://github.com/digitalocean/netbox) API.
-It's based on the APIv2 which is released since version 2.0.0.
+It's based on the APIv2 which is released since version 2.0.0. It requires python 3.
 
 The full documentation can be found here_.
 
@@ -15,7 +15,7 @@ Installation
 
 To get the latest version from Github:
 
-   $ pip install python-netbox
+   $ pip3 install python-netbox
 
 -----------------
 Usage
