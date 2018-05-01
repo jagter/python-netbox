@@ -6,17 +6,19 @@ from netbox import exceptions
 class NetboxConnection(object):
 
     def __init__(self, ssl_verify=False, use_ssl=True, host=None, auth_token=None, auth=None,
-                 port=80):
+                 port=80, api_prefix=None):
         self.use_ssl = use_ssl
         self.host = host
         self.auth_token = auth_token
         self.port = port
         self.auth = auth
+        self.api_prefix = api_prefix
 
         if use_ssl:
             self.port = 443
 
-        self.base_url = 'http{s}://{host}:{p}/api'.format(s='s' if use_ssl else '', p=self.port, host=self.host)
+        self.base_url = 'http{s}://{host}:{p}{prefix}'.format(s='s' if use_ssl else '', p=self.port, host=self.host,
+                                                               prefix='/api' if api_prefix is None else api_prefix)
         self.session = requests.Session()
         self.session.verify = ssl_verify
 
