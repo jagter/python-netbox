@@ -72,7 +72,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            rack_id = self.get_racks(facility_id=rack_name)[0]['id']
+            rack_id = self.get_racks(name=rack_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.delete('/dcim/racks/', rack_id)
