@@ -142,3 +142,15 @@ class Virtualization(object):
     def get_virtual_machine(self, **kwargs):
         """Return virtual-machine based on filter"""
         return self.netbox_con.get('/virtualization/virtual-machines/', **kwargs)
+
+    def delete_virtual_machine(self, virtual_machine_name):
+        """Delete virtual machine
+
+        :param name: name of the virtual machine to delete
+        :return: bool True if successful otherwise raise exception
+        """
+        try:
+            virtual_machine_id = self.get_virtual_machines(name=virtual_machine_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('virtual-machine: {}'.format(virtual_machine_name)) from None
+        return self.netbox_con.delete('/virtualization/virtual-machines/', virtual_machine_id)
