@@ -1,4 +1,6 @@
 import netbox.exceptions as exceptions
+
+
 class Virtualization(object):
 
     def __init__(self, netbox_con):
@@ -114,6 +116,7 @@ class Virtualization(object):
         """Update virtual_machine interface
 
         :param name: name of the interface to update
+        :param virtual_machine: name of the virtual-machine to update
         :param kwargs: update data
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -150,7 +153,7 @@ class Virtualization(object):
     def delete_virtual_machine(self, virtual_machine_name):
         """Delete virtual machine
 
-        :param name: name of the virtual machine to delete
+        :param virtual_machine_name: name of the virtual machine to delete
         :return: bool True if successful otherwise raise exception
         """
         try:
@@ -162,7 +165,7 @@ class Virtualization(object):
     def update_virtual_machine(self, virtual_machine_name, **kwargs):
         """Update virtual-machine
 
-        :param name: name of the virtual-machine to update
+        :param virtual_machine_name: name of the virtual-machine to update
         :param kwargs: update data
         :return: bool True if successful otherwise raise UpdateException
         """
