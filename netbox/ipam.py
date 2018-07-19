@@ -46,7 +46,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            ip_id = self.get_ip_addresses(q=ip_address)[0]['id']
+            ip_id = self.get_ip_addresses(address=ip_address)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip: {}'.format(ip_address)) from None
         return self.netbox_con.patch('/ipam/ip-addresses/', ip_id, **kwargs)
@@ -58,7 +58,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            ip_id = self.get_ip_addresses(q=ip_address)[0]['id']
+            ip_id = self.get_ip_addresses(address=ip_address)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip: {}'.format(ip_address)) from None
         return self.netbox_con.delete('/ipam/ip-addresses/', ip_id)
