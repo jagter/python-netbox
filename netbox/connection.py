@@ -102,7 +102,6 @@ class NetboxConnection(object):
 
         body_data = {key: value for (key, value) in kwargs.items()}
         resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
-
         if resp_ok and resp_status == 200:
             return True
         else:
@@ -116,9 +115,8 @@ class NetboxConnection(object):
             body_data.update({key: value for (key, value) in kwargs.items()})
 
         resp_ok, resp_status, resp_data = self.__request('POST', params=params, body=body_data)
-
         if resp_ok and resp_status == 201:
-            return True
+            return resp_data['id']
         else:
             raise exceptions.CreateException(resp_data)
 
@@ -126,7 +124,6 @@ class NetboxConnection(object):
 
         del_str = '{}{}'.format(params, del_id)
         resp_ok, resp_status, resp_data = self.__request('DELETE', del_str)
-
         if resp_ok and resp_status == 204:
             return True
         else:
