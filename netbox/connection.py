@@ -35,6 +35,14 @@ class NetboxConnection(object):
             raise ValueError('Only one authentication method is possible. Please use auth or auth_token')
 
     def __request(self, method, params=None, key=None, body=None, url=None):
+
+        if method is 'post' or 'patch' or 'delete':
+            if not self.auth_token:
+                raise exceptions.AuthException('Authentication credentials were not provided')
+
+            if self.auth:
+                raise exceptions.AuthException('With basic authentication the API is not writable.')
+
         if url is None:
             if key is not None:
                 url = self.base_url + str(params) + str('{}/'.format(key))
@@ -87,16 +95,12 @@ class NetboxConnection(object):
             return []
 
     def put(self, params):
-        if self.auth:
-            raise exceptions.AuthException('With basic auth the API is not writable')
+
         return self.__request('PUT', params)
 
     def patch(self, params, key, **kwargs):
-        if self.auth:
-            raise exceptions.AuthException('With basic auth the API is not writable')
 
         body_data = {key: value for (key, value) in kwargs.items()}
-
         resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
 
         if resp_ok and resp_status == 200:
@@ -105,8 +109,7 @@ class NetboxConnection(object):
             raise exceptions.UpdateException(resp_data)
 
     def post(self, params, required_fields, **kwargs):
-        if self.auth:
-            raise exceptions.AuthException('With basic auth the API is not writable')
+
         body_data = {key: value for (key, value) in required_fields.items()}
 
         if kwargs:
@@ -119,10 +122,8 @@ class NetboxConnection(object):
         else:
             raise exceptions.CreateException(resp_data)
 
-
     def delete(self, params, del_id):
-        if self.auth:
-            raise exceptions.AuthException('With basic authentication the API is not writable')
+
         del_str = '{}{}'.format(params, del_id)
         resp_ok, resp_status, resp_data = self.__request('DELETE', del_str)
 
