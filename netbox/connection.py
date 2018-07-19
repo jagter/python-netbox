@@ -116,7 +116,7 @@ class NetboxConnection(object):
 
         resp_ok, resp_status, resp_data = self.__request('POST', params=params, body=body_data)
         if resp_ok and resp_status == 201:
-            return resp_data['id']
+            return resp_data
         else:
             raise exceptions.CreateException(resp_data)
 
