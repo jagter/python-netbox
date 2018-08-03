@@ -40,7 +40,6 @@ class NetboxConnection(object):
 
     @property
     def session(self):
-        print('entering session')
         if not self._session:
             self._connect()
         return self._session
@@ -62,8 +61,6 @@ class NetboxConnection(object):
         if self.auth and self.auth_token:
             raise ValueError('Only one authentication method is possible. Please use auth or auth_token')
 
-        print('entering _connect')
-        print(sess)
         self._session = sess
 
     def __request(self, method, params=None, key=None, body=None, url=None):
@@ -82,9 +79,7 @@ class NetboxConnection(object):
                 url = self.base_url + str(params)
 
         request = requests.Request(method=method, url=url, json=body)
-        print(self._session)
         prepared_request = self.session.prepare_request(request)
-        print(prepared_request)
 
         try:
             response = self.session.send(prepared_request)
