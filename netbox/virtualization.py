@@ -30,7 +30,7 @@ class Virtualization(object):
         """Delete a cluster
 
         :param name: name of the cluster to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: netbox object if succesful otherwase delete exception
         """
         try:
             cluster_id = self.get_clusters(name=name)[0]['id']
@@ -155,7 +155,7 @@ class Virtualization(object):
     
         :param name: name of the virtual machine
         :param cluster_name: Name of existing cluster
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         try:
             cluster_id = self.get_clusters(name=cluster_name)[0]['id']
