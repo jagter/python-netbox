@@ -36,6 +36,7 @@ class CreateException(BaseException):
     def __str__(self):
         return '{}'.format(self.err)
 
+
 class UpdateException(BaseException):
     """Raised when an object update fails"""
     def __init__(self, resp_data):
@@ -46,6 +47,7 @@ class UpdateException(BaseException):
 
     def __str__(self):
         return '{}'.format(self.err)
+
 
 class AuthException(BaseException):
     """Raised when an API call method is not allowed"""
