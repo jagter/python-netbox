@@ -150,6 +150,21 @@ class Virtualization(object):
         """Return virtual-machine based on filter"""
         return self.netbox_con.get('/virtualization/virtual-machines/', **kwargs)
 
+    def create_virtual_machine(self, name, cluster_name, **kwargs):
+        """Create a virtual machine
+    
+        :param name: name of the virtual machine
+        :param cluster_name: Name of existing cluster
+        :return: bool True if successful otherwise raise CreateException
+        """
+        try:
+            cluster_id = self.get_clusters(name=cluster_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('cluster-name: {}'.format(cluster_name)) from None
+
+        required_fields = {"name": name, "cluster": cluster_id}
+        return self.netbox_con.post('/virtualization/virtual-machines/', required_fields, **kwargs)
+
     def delete_virtual_machine(self, virtual_machine_name):
         """Delete virtual machine
 
