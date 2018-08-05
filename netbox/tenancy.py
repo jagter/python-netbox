@@ -16,7 +16,7 @@ class Tenancy(object):
         :param name: Tenant name
         :param slug: slug name
         :param kwargs: optional fields
-        :return: bool True if successful otherwise exception raised
+        :return: netbox object if successful otherwise exception raised
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/tenancy/tenants/', required_fields, **kwargs)
@@ -56,7 +56,7 @@ class Tenancy(object):
         :param name: Tenant-group name
         :param slug: slug name
         :param kwargs: optional fields
-        :return: bool True if successful otherwise exception raised
+        :return: netbox object if successful otherwise exception raised
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/tenancy/tenant-groups/', required_fields, **kwargs)

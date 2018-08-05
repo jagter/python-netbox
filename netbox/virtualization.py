@@ -16,7 +16,7 @@ class Virtualization(object):
         :param name: name of the cluster
         :param type: cluster type
         :param kwargs: optional arguments
-        :return: bool True if successful otherwise exception raised
+        :return: netbox object if successful otherwise exception raised
         """
         try:
             cluster_type_id = self.get_cluster_types(name=type)[0]['id']
@@ -60,7 +60,7 @@ class Virtualization(object):
 
         :param name: name of the cluster
         :param slug: slug name
-        :return:  bool True if successful otherwise create exception
+        :return:  netbox object if successful otherwise create exception
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/virtualization/cluster-types/', required_fields)
@@ -103,7 +103,7 @@ class Virtualization(object):
 
         :param name: name of the interface
         :param virtual_machine: name of virtual machine to attach interface
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         try:
             virtual_machine_id = self.get_virtual_machine(name=virtual_machine)[0]['id']

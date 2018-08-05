@@ -33,7 +33,7 @@ class Ipam(object):
 
         :param address: IP address
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"address": address}
         return self.netbox_con.post('/ipam/ip-addresses/', required_fields, **kwargs)
@@ -80,7 +80,7 @@ class Ipam(object):
 
         :param prefix: A valid ip prefix format. The syntax will be checked with the ipaddress module
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"prefix": prefix}
 
@@ -136,7 +136,7 @@ class Ipam(object):
         :param name: Name of the vrf
         :param rd: Route distinguisher in any format
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "rd": rd}
         return self.netbox_con.post('/ipam/vrfs/', required_fields, **kwargs)
@@ -206,7 +206,7 @@ class Ipam(object):
 
         :param name: Name of the rir
         :param slug: Name of the slug
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/ipam/rirs/', required_fields)
@@ -245,7 +245,7 @@ class Ipam(object):
 
         :param name: Name of the prefix/vlan role
         :param slug: Name of the slug
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/ipam/roles/', required_fields, **kwargs)
@@ -285,7 +285,7 @@ class Ipam(object):
         :param vid: ID of the new vlan
         :param vlan_name: Name of the vlan
         :param kwargs: Optional Arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"vid": vid, "name": vlan_name}
         return self.netbox_con.post('/ipam/vlans/', required_fields, **kwargs)
@@ -325,7 +325,7 @@ class Ipam(object):
         :param name: name of the vlan group
         :param slug: slug
         :param kwargs: Optional Arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/ipam/vlan-groups/', required_fields, **kwargs)

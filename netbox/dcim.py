@@ -16,7 +16,7 @@ class Dcim(object):
         :param name: Site name
         :param slug: slug name
         :param kwargs: optional fields
-        :return: bool True if successful otherwise exception raised
+        :return: netbox object if successful otherwise exception raised
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/sites/', required_fields, **kwargs)
@@ -56,7 +56,7 @@ class Dcim(object):
         :param name: Organizational rack name
         :param site_name: The site at which the rack exists
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise create exception
+        :return: netbox object if successful otherwise create exception
         """
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
@@ -114,7 +114,7 @@ class Dcim(object):
         :param site_name: Name of the site where the device is created
         :param device_type: Type for the new device
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name}
         try:
@@ -170,7 +170,7 @@ class Dcim(object):
         :param slug: Slug name
         :param manufacturer: Name of the manufacurer
         :param kwargs: optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"model": model, "slug": slug, "manufacturer": manufacturer}
         return self.netbox_con.post('/dcim/device-types/', required_fields, **kwargs)
@@ -211,7 +211,7 @@ class Dcim(object):
         :param color: HTML color code
         :param slug: Slug name
         :param kwargs: optional arguments
-        :return: bool True if successful otherwise CreateException
+        :return: netbox object if successful otherwise CreateException
         """
         required_fields = {"name": name, "color": color, "slug": slug}
         return self.netbox_con.post('/dcim/device-roles/', required_fields, **kwargs)
@@ -251,7 +251,7 @@ class Dcim(object):
         :param name: Name of manufacturer
         :param slug: Name of slug
         :param kwargs: Optional arguments
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/dcim/manufacturers/', required_fields, **kwargs)
@@ -333,7 +333,7 @@ class Dcim(object):
         in the netbox code for the correct form factor number.
         :param kwargs: optional arguments
         :param device_id: ID of the device to associate interface with
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         required_fields = {"name": name, "form_factor": form_factor, "device": device_id}
         return self.netbox_con.post('/dcim/interfaces/', required_fields, **kwargs)
@@ -411,7 +411,7 @@ class Dcim(object):
         :param name: name of the interface
         :param kwargs: optional arguments
         :param device_type: name of the device_type to associate template with
-        :return: bool True if successful otherwise raise CreateException
+        :return: netbox object if successful otherwise raise CreateException
         """
         try:
             device_type_id = self.get_device_types(model=device_type)[0]['id']
