@@ -36,7 +36,7 @@ class NetboxConnection(object):
 
     def __request(self, method, params=None, key=None, body=None, url=None):
 
-        if method is 'post' or 'patch' or 'delete':
+        if method is not 'GET':
             if not self.auth_token:
                 raise exceptions.AuthException('Authentication credentials were not provided')
 
