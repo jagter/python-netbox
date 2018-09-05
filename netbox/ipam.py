@@ -8,6 +8,10 @@ class Ipam(object):
 
         self.netbox_con = netbox_con
 
+    def get_services(self, **kwargs):
+         """Return all services"""
+         return self.netbox_con.get('/ipam/services/', **kwargs)
+
     def get_ip_addresses(self, **kwargs):
         """Return all ip addresses"""
         return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
