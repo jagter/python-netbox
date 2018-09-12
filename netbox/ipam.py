@@ -8,6 +8,14 @@ class Ipam(object):
 
         self.netbox_con = netbox_con
 
+    def get_ip_address(self, address):
+        """Get IP address
+
+        :param address: IP address
+        :return: IP address information
+        """
+        return self.netbox_con.get('/ipam/ip-addresses', address=address)
+
     def get_ip_addresses(self, **kwargs):
         """Return all ip addresses"""
         return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
