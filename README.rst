@@ -51,7 +51,7 @@ Delete a site:
 
 Get IP address object:
 
-    >>> netbox.ipam.get_ip(device='device_name', interface_id=interface_id)
+    >>> netbox.ipam.get_ip_addresses(address='10.0.0.1/16')
 
 -----------------
 Support
