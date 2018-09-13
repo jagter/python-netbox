@@ -25,7 +25,7 @@ class Ipam(object):
         return self.netbox_con.get('/ipam/ip-addresses', device=device_name)
 
     def get_ip_by_virtual_machine(self, vm_name):
-        """Get IPs which are associated to a device
+        """Get IPs which are associated to a virtual-machine
 
         :param vm_name: Name of the virtual machine
         :return: ip address information
