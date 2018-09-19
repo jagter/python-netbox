@@ -201,4 +201,10 @@ class Circuits(object):
             circuits_id = self.get_circuits(cid=cid, provider=provider)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('circuits {} with provider {}'.format(cid, provider)) from None
-        return self.netbox_con.patch('/circuits/circuit-types/', type_id, **kwargs)
+
+        try:
+            termination_id = self.get_terminations(circuits_id=circuits_id)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('termination with cid {} and provider {}'.format(cid, provider)) from None
+
+        return self.netbox_con.patch('/circuits/circuit-terminations/', termination_id, **kwargs)
