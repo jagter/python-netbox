@@ -48,7 +48,7 @@ class Circuits(object):
     def delete_circuit(self, cid, provider):
         """Delete circuits
 
-        :param cid: circuit id
+        :param cid: cid
         :param provider: Name of the provider
         :return: bool True if succesful otherwase delete exception
         """
@@ -59,9 +59,9 @@ class Circuits(object):
         return self.netbox_con.delete('/circuits/circuits/', circuits_id)
 
     def update_circuit(self, cid, provider, **kwargs):
-        """Update circuits
+        """Update circuit
 
-        :param cid: circuit id
+        :param cid: cid
         :param provider: provider name
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
@@ -73,7 +73,7 @@ class Circuits(object):
         return self.netbox_con.patch('/circuits/circuits/', circuits_id, **kwargs)
 
     def get_providers(self, **kwargs):
-        """Returns the circuit providers"""
+        """Returns circuit providers"""
         return self.netbox_con.get('/circuits/providers/', **kwargs)
 
     def create_provider(self, name, slug):
@@ -86,29 +86,29 @@ class Circuits(object):
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/circuits/providers/', required_fields)
 
-    def delete_provider(self, circuit_provider_name):
+    def delete_provider(self, provider_name):
         """Delete circuit provider
 
-        :param circuit_provider_name: circuit provider to delete
+        :param provider_name: circuit provider to delete
         :return: bool True if succesful otherwase delete exception
         """
         try:
-            circuits_provider_id = self.get_providers(name=circuit_provider_name)[0]['id']
+            circuits_provider_id = self.get_providers(name=provider_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit provider: {}'.format(circuit_provider_name)) from None
+            raise exceptions.NotFoundException('circuit provider: {}'.format(provider_name)) from None
         return self.netbox_con.delete('/circuits/providers/', circuits_provider_id)
 
-    def update_provider(self, circuit_provider_name, **kwargs):
+    def update_provider(self, provider_name, **kwargs):
         """Update circuit provider
 
-        :param circuit_provider_name: circuits role to update
+        :param provider_name: circuits role to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            circuits_provider_id = self.get_providers(name=circuit_provider_name)[0]['id']
+            circuits_provider_id = self.get_providers(name=provider_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit provider: {}'.format(circuit_provider_name)) from None
+            raise exceptions.NotFoundException('circuit provider: {}'.format(provider_name)) from None
         return self.netbox_con.patch('/circuits/providers/', circuits_provider_id, **kwargs)
 
     def get_types(self, **kwargs):
@@ -125,16 +125,16 @@ class Circuits(object):
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/circuits/circuit-types/', required_fields)
 
-    def delete_type(self, circuit_type_name):
+    def delete_type(self, type_name):
         """Delete circuit type
 
-        :param circuit_type_name: circuit type to delete
+        :param type_name: circuit type to delete
         :return: bool True if succesful otherwase delete exception
         """
         try:
-            circuits_type_id = self.get_types(name=circuit_type_name)[0]['id']
+            circuits_type_id = self.get_types(name=type_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit type: {}'.format(circuit_type_name)) from None
+            raise exceptions.NotFoundException('circuit type: {}'.format(type_name)) from None
         return self.netbox_con.delete('/circuits/circuit-types/', circuits_type_id)
 
     def update_type(self, circuit_type_name, **kwargs):
