@@ -1,5 +1,6 @@
 import requests
 import socket
+from typing import Generator, List
 from netbox import exceptions
 
 
@@ -74,8 +75,7 @@ class NetboxConnection(object):
 
         return response.ok, response.status_code, response_data
 
-    def get(self, param, key=None, **kwargs):
-
+    def forge_url(self, param, key, **kwargs):
         if kwargs:
             url = '{}{}?{}'.format(self.base_url, param,
                                    '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()))
@@ -84,8 +84,17 @@ class NetboxConnection(object):
         else:
             url = '{}{}'.format(self.base_url, param)
 
-        resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
+        return url
 
+    @staticmethod
+    def manage_response(resp_ok, resp_status, resp_data):
+        """
+
+        :param resp_ok:
+        :param resp_status:
+        :param resp_data:
+        :return: empty list
+        """
         if resp_ok and resp_status == 200:
             if 'results' in resp_data:
                 return resp_data['results']
@@ -93,6 +102,56 @@ class NetboxConnection(object):
                 return resp_data
         else:
             return []
+
+    @staticmethod
+    def _flat_list(list_of_list: List[List]) -> List:
+        flattened_list = [y for x in list_of_list for y in x]
+        return flattened_list
+
+    def get(self, param, key=None, **kwargs):
+        if "scroll_api" in kwargs:
+            if kwargs.get("scroll_api"):
+                all_rst = []
+                for tmp in self._get_all(param, key, **kwargs):
+                    all_rst.append(tmp)
+                return self._flat_list(all_rst)
+
+        return self._get_one_call(param, key, **kwargs)
+
+    def _get_one_call(self, param, key=None, **kwargs):
+        url = self.forge_url(param, key, kwargs)
+
+        resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
+
+        return self.manage_response(resp_ok, resp_status, resp_data)
+
+    def _get_all(self, param, key=None, **kwargs)-> Generator[str]:
+        """
+        Generator of values
+        :param param:
+        :param key:
+        :param kwargs:
+        """
+        url = self.forge_url(param, key, kwargs)
+
+        first_run = True
+        while True:
+            if first_run:
+                first_run = False
+            else:
+                if resp_data.next is None:  # TODO
+                    break
+                else:
+                    url = resp_data.next
+
+            resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
+
+            rst = self.manage_response(resp_ok, resp_status, resp_data)
+
+            if not rst:
+                break
+            else:
+                yield rst
 
     def put(self, params):
 

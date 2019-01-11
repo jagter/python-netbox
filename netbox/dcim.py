@@ -7,7 +7,7 @@ class Dcim(object):
         self.netbox_con = netbox_con
 
     def get_sites(self, **kwargs):
-        """Returns the available sites"""
+        """return all available sites"""
         return self.netbox_con.get('/dcim/sites/', **kwargs)
 
     def create_site(self, name, slug, **kwargs):
@@ -47,7 +47,7 @@ class Dcim(object):
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
     def get_racks(self, **kwargs):
-        """Returns the available racks"""
+        """return all available racks"""
         return self.netbox_con.get('/dcim/racks/', **kwargs)
 
     def create_rack(self, name, site_name, **kwargs):

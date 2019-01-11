@@ -95,8 +95,8 @@ class Virtualization(object):
         return self.netbox_con.get('/virtualization/interfaces/', **kwargs)
 
     def get_interface(self, **kwargs):
-        """Return interface by filter"""
-        return self.netbox_con.get('/virtualization/interfaces/', **kwargs)
+        """for API compatibility"""
+        return self.get_interfaces(**kwargs)
 
     def create_interface(self, name, virtual_machine, **kwargs):
         """Create an interface for a virtual machine
@@ -106,7 +106,7 @@ class Virtualization(object):
         :return: netbox object if successful otherwise raise CreateException
         """
         try:
-            virtual_machine_id = self.get_virtual_machine(name=virtual_machine)[0]['id']
+            virtual_machine_id = self.get_virtual_machines(name=virtual_machine)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('virtual-machine: {}'.format(virtual_machine)) from None
         required_fields = {"name": name, "virtual_machine": virtual_machine_id}
@@ -121,7 +121,7 @@ class Virtualization(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            interface_id = self.get_interface(name=name, virtual_machine=virtual_machine)[0]['id']
+            interface_id = self.get_interfaces(name=name, virtual_machine=virtual_machine)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface: {} or virtual_machine: {}'
                                                .format(name, virtual_machine)) from None
@@ -135,7 +135,7 @@ class Virtualization(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            interface_id = self.get_interface(name=name, virtual_machine=virtual_machine)[0]['id']
+            interface_id = self.get_interfaces(name=name, virtual_machine=virtual_machine)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface: {} or virtual_machine {}'
                                                .format(name, virtual_machine)) from None
@@ -147,8 +147,8 @@ class Virtualization(object):
         return self.netbox_con.get('/virtualization/virtual-machines/', **kwargs)
 
     def get_virtual_machine(self, **kwargs):
-        """Return virtual-machine based on filter"""
-        return self.netbox_con.get('/virtualization/virtual-machines/', **kwargs)
+        """for API compatibility"""
+        return self.get_virtual_machines(kwargs)
 
     def create_virtual_machine(self, name, cluster_name, **kwargs):
         """Create a virtual machine

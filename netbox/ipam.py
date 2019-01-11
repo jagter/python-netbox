@@ -320,7 +320,7 @@ class Ipam(object):
         return self.netbox_con.patch('/ipam/vlans/', vlan_id, **kwargs)
 
     def get_vlan_groups(self, **kwargs):
-        """Return all vlans"""
+        """Return all vlans groups"""
         return self.netbox_con.get('/ipam/vlan-groups/', **kwargs)
 
     def create_vlan_group(self, name, slug, **kwargs):

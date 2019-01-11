@@ -3,12 +3,15 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 def readme():
     with open('README.rst') as f:
         return f.read()
+
 
 setup(name='python-netbox',
       version='0.0.12',
@@ -21,10 +24,10 @@ setup(name='python-netbox',
       download_url='https://github.com/jagter/python-netbox/releases/tag/0.0.12.tar.gz',
       packages=find_packages(),
       install_requires=['ipaddress', 'requests'],
-      classifiers = [
-        "Programming Language :: Python :: 3",
-        "Intended Audience :: System Administrators",
-        "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.6",
+      classifiers=[
+          "Programming Language :: Python :: 3",
+          "Intended Audience :: System Administrators",
+          "License :: OSI Approved :: Apache Software License",
+          "Programming Language :: Python :: 3.6",
       ],
-     )
+      )
