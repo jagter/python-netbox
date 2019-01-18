@@ -4,6 +4,7 @@ import netbox.ipam as ipam
 import netbox.virtualization as virtualization
 import netbox.exceptions as exceptions
 import netbox.tenancy as tenancy
+import netbox.extras as extras
 
 
 class NetBox(object):
@@ -13,4 +14,5 @@ class NetBox(object):
         self.dcim = dcim.Dcim(self.connection)
         self.virtualization = virtualization.Virtualization(self.connection)
         self.tenancy = tenancy.Tenancy(self.connection)
+        self.extras = extras.Extras(self.connection)
         self.exceptions = exceptions
