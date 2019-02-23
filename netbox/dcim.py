@@ -7,7 +7,7 @@ class Dcim(object):
         self.netbox_con = netbox_con
 
     def get_sites(self, **kwargs):
-        """Returns the available sites"""
+        """Returns all available sites"""
         return self.netbox_con.get('/dcim/sites/', **kwargs)
 
     def create_site(self, name, slug, **kwargs):
@@ -47,7 +47,7 @@ class Dcim(object):
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
     def get_racks(self, **kwargs):
-        """Returns the available racks"""
+        """Returns all available racks"""
         return self.netbox_con.get('/dcim/racks/', **kwargs)
 
     def create_rack(self, name, site_name, **kwargs):
@@ -89,6 +89,51 @@ class Dcim(object):
         except IndexError:
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
+
+    def get_rack_groups(self, **kwargs):
+        """Returns all available rack groups"""
+        return self.netbox_con.get('/dcim/rack-groups/', **kwargs)
+
+    def create_rack_group(self, name, slug, site_name, **kwargs):
+        """Create new rack group
+
+        :param name: Rack group name
+        :param slug: slug name
+        :param site_name: The site at which the rack exists
+        :param kwargs: Optional arguments
+        :return: netbox object if successful otherwise create exception
+        """
+        try:
+            site_id = self.get_sites(name=site_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+        required_fields = {"name": name, "slug": slug, "site": site_id}
+        return self.netbox_con.post('/dcim/rack-groups/', required_fields, **kwargs)
+
+    def delete_rack_group(self, name):
+        """Delete rack group
+
+        :param name: Name of the rack group to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            rack_group_id = self.get_rack_groups(name=name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('rack-group: {}'.format(name)) from None
+        return self.netbox_con.delete('/dcim/rack-groups/', rack_group_id)
+
+    def update_rack_group(self, name, **kwargs):
+        """
+
+        :param name: Rack group name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        try:
+            rack_group_id = self.get_rack_groups(name=name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('rack group: {}'.format(name)) from None
+        return self.netbox_con.patch('/dcim/rack-groups/', rack_group_id, **kwargs)
 
     def get_devices(self, **kwargs):
         """Get all devices"""
