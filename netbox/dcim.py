@@ -6,6 +6,46 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
+    def get_regions(self, **kwargs):
+        """Returns the available regions"""
+        return self.netbox_con.get('/dcim/regions/', **kwargs)
+
+    def create_region(self, name, slug, **kwargs):
+        """Create a new region
+
+        :param name: Region name
+        :param slug: slug name
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {"name": name, "slug": slug}
+        return self.netbox_con.post('/dcim/regions/', required_fields, **kwargs)
+
+    def delete_region(self, region_name):
+        """Delete region
+
+        :param region_name: Region to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        try:
+            region_id = self.get_regions(name=region_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+        return self.netbox_con.delete('/dcim/regions/', region_id)
+
+    def update_region(self, region_name, **kwargs):
+        """
+
+        :param region_name: Region to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        try:
+            region_id = self.get_regions(name=region_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+        return self.netbox_con.patch('/dcim/regions/', region_id, **kwargs)
+
     def get_sites(self, **kwargs):
         """Returns all available sites"""
         return self.netbox_con.get('/dcim/sites/', **kwargs)
