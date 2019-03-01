@@ -309,7 +309,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            device_role_id = self.get_device_types(name=device_role)[0]['id']
+            device_role_id = self.get_device_roles(name=device_role)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
         return self.netbox_con.patch('/dcim/device-roles/', device_role_id, **kwargs)
@@ -321,7 +321,7 @@ class Dcim(object):
         :return: bool True if successful otherwise raise DeleteException
         """
         try:
-            device_role_id = self.get_device_types(name=device_role)[0]['id']
+            device_role_id = self.get_device_roles(name=device_role)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
         return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
