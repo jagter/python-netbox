@@ -6,6 +6,13 @@ class Tenancy(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
+    def get_choices(self, choice_id=None):
+        """Return choices for all fields if choice_id is not defined
+
+        :param choice_id: Optional model:field tuple
+        """
+        return self.netbox_con.get('/tenancy/_choices/', choice_id)
+
     def get_tenants(self, **kwargs):
         """Returns the tenants"""
         return self.netbox_con.get('/tenancy/tenants/', **kwargs)

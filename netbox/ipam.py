@@ -8,6 +8,13 @@ class Ipam(object):
 
         self.netbox_con = netbox_con
 
+    def get_choices(self, choice_id=None):
+        """Return choices for all fields if choice_id is not defined
+
+        :param choice_id: Optional model:field tuple
+        """
+        return self.netbox_con.get('/ipam/_choices/', choice_id)
+
     def get_services(self, **kwargs):
         """Return all services"""
         return self.netbox_con.get('/ipam/services/', **kwargs)

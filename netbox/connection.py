@@ -80,7 +80,10 @@ class NetboxConnection(object):
             url = '{}{}?{}'.format(self.base_url, param,
                                    '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()))
         elif key:
-            url = '{}{}/?q={}'.format(self.base_url, param, key)
+            if '_choices' in param:
+                url = '{}{}{}/'.format(self.base_url, param, key)
+            else:
+                url = '{}{}/?q={}'.format(self.base_url, param, key)
         else:
             url = '{}{}'.format(self.base_url, param)
 
