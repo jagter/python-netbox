@@ -111,7 +111,7 @@ class Ipam(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            ip_prefix_id = self.get_ip_prefixes(q=ip_prefix)[0]['id']
+            ip_prefix_id = self.get_ip_prefixes(prefix=ip_prefix)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('ip-prefix: {}'.format(ip_prefix)) from None
         return self.netbox_con.patch('/ipam/prefixes/', ip_prefix_id, **kwargs)
