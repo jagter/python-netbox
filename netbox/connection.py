@@ -87,15 +87,26 @@ class NetboxConnection(object):
         else:
             url = '{}{}'.format(self.base_url, param)
 
-        resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
+        results = []
+        while True:
+            resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
 
-        if resp_ok and resp_status == 200:
-            if 'results' in resp_data:
-                return resp_data['results']
+            if resp_ok and resp_status == 200:
+                if 'results' in resp_data:
+                    results.extend(resp_data['results'])
+                else:
+                    results = resp_data
+                    break
+
+                # If the results were paged, keep going until we get them all
+                if resp_data['next']:
+                    url = resp_data['next']
+                else:
+                    break
             else:
-                return resp_data
-        else:
-            return []
+                break
+
+        return results
 
     def put(self, params):
 
