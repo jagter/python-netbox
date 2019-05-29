@@ -74,18 +74,18 @@ class NetboxConnection(object):
 
         return response.ok, response.status_code, response_data
 
-    def get(self, param, key=None, **kwargs):
+    def get(self, param, key=None, limit=0, **kwargs):
 
         if kwargs:
-            url = '{}{}?{}'.format(self.base_url, param,
-                                   '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()))
+            url = '{}{}?{}&limit={}'.format(self.base_url, param,
+                                            '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()), limit)
         elif key:
             if '_choices' in param:
-                url = '{}{}{}/'.format(self.base_url, param, key)
+                url = '{}{}{}/?limit={}'.format(self.base_url, param, key, limit)
             else:
-                url = '{}{}/?q={}'.format(self.base_url, param, key)
+                url = '{}{}/?q={}&limit={}'.format(self.base_url, param, key, limit)
         else:
-            url = '{}{}'.format(self.base_url, param)
+            url = '{}{}?limit={}'.format(self.base_url, param, limit)
 
         resp_ok, resp_status, resp_data = self.__request('GET', params=param, key=key, url=url)
 
