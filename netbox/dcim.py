@@ -523,7 +523,7 @@ class Dcim(object):
             interface_template_id = self.get_interface_templates(name=interface_template_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface: {}'.format(interface_template_name)) from None
-        return self.netbox_con.patch('/dcim/interface-templates/', interface_template_id **kwargs)
+        return self.netbox_con.patch('/dcim/interface-templates/', interface_template_id, **kwargs)
 
     def delete_interface_template(self, interface_template_name):
         """Delete interface template
@@ -536,3 +536,50 @@ class Dcim(object):
         except IndexError:
             raise exceptions.NotFoundException('interface-template: {}'.format(interface_template_name)) from None
         return self.netbox_con.delete('/dcim/interface-templates/', interface_template_id)
+
+    def get_inventory_items(self, **kwargs):
+        """Return inventory items"""
+        return self.netbox_con.get('/dcim/inventory-items/', **kwargs)
+
+    def create_inventory_item(self, name, device_name, **kwargs):
+        """Create inventory item
+
+        :param name: Inventory item name
+        :param device_name: Name of device
+        :param kwargs: Extra inventory parameters
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        try:
+            device_id = self.get_devices(name=device_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('device: {}'.format(device_name)) from None
+        required_fields = {"name": name, "device": device_id}
+        return self.netbox_con.post('/dcim/inventory-items/', required_fields, **kwargs)
+
+    def update_inventory_item(self, name, device_name, **kwargs):
+        """Update inventory item
+
+        :param name: Inventory item name
+        :param device_name: Name of device
+        :param kwargs: Extra inventory items to update
+        :return bool True if successful otherwise raise UpdateException
+
+        """
+        try:
+            inventory_item_id = self.get_inventory_items(name=name, device=device_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
+        return self.netbox_con.patch('/dcim/inventory-items/', inventory_item_id, **kwargs)
+
+    def delete_inventory_item(self, name, device_name):
+        """Delete inventory item
+
+        :param name: Name of inventory item to delete
+        :param device_name: Name of the device to remove inventory item from
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            inventory_item_id = self.get_inventory_items(name=name, device=device_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
+        return self.netbox_con.delete('/dcim/inventory-items/', inventory_item_id)
