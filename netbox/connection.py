@@ -16,7 +16,6 @@ class NetboxConnection(object):
 
         self.base_url = 'http{s}://{host}{p}{prefix}'.format(s='s' if use_ssl else '', p=':{}'.format(self.port) if self.port else '', host=self.host, prefix='/api' if api_prefix is None else api_prefix)
 
-        print(self.base_url)
         self.session = requests.Session()
         self.session.verify = ssl_verify
 
