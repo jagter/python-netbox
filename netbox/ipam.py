@@ -19,6 +19,18 @@ class Ipam(object):
         """Return all services"""
         return self.netbox_con.get('/ipam/services/', **kwargs)
 
+    def create_service(self, name, port, protocol, **kwargs):
+        """Create a new service definition
+
+        :param name: Name of the provided service
+        :param port: Service listening port
+        :param protocol: Service used protocol 6 is used to TCP and 17 for UDP 
+        :param kwargs: Optional arguments (need to attach service to a 'virtual_machine: id' or 'device: id' )
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        required_fields = {"name": name, "port": port, "protocol": protocol }
+        return self.netbox_con.post('/ipam/services/', required_fields, **kwargs)
+
     def get_ip_addresses(self, **kwargs):
         """Return all ip addresses"""
         return self.netbox_con.get('/ipam/ip-addresses/', **kwargs)
