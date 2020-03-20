@@ -562,7 +562,6 @@ class Dcim(object):
         :param device_name: Name of device
         :param kwargs: Extra inventory items to update
         :return bool True if successful otherwise raise UpdateException
-
         """
         try:
             inventory_item_id = self.get_inventory_items(name=name, device=device_name)[0]['id']
