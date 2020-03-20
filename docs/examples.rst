@@ -29,11 +29,11 @@ Get all devices:
 
 Get devices per rack:
 
-    >>> netbox.dcim.get_devices_per_rack('rack_name')
+    >>> netbox.dcim.get_devices(rack_id='1')
 
 Get device by name
 
-    >>> netbox.dcim.get_device_by_name('device_name')
+    >>> netbox.dcim.get_devices(name='device_name')
 
 Get per device the primary ip and mac address:
 
