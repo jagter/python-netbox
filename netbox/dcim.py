@@ -421,8 +421,7 @@ class Dcim(object):
         """Create a new interface
 
         :param name: name of the interface
-        :param interface_type: interface type. It is not possible to get the list of types from the api. Search
-        in the netbox code for the correct type number.
+        :param interface_type: interface type. It is not possible to get the list of types from the api. Search in the netbox code for the correct type number.
         :param kwargs: optional arguments
         :param device_id: ID of the device to associate interface with
         :return: netbox object if successful otherwise raise CreateException
