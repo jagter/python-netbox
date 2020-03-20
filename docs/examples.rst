@@ -29,7 +29,7 @@ Get all devices:
 
 Get devices per rack:
 
-    >>> netbox.dcim.get_devices(rack_id='1')
+    >>> netbox.dcim.get_devices(rack_id=1)
 
 Get device by name
 
