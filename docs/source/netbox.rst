@@ -4,14 +4,6 @@ netbox package
 Submodules
 ----------
 
-netbox.connection module
-------------------------
-
-.. automodule:: netbox.connection
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 netbox.dcim module
 ------------------
 
@@ -40,14 +32,6 @@ netbox.ipam module
 ------------------
 
 .. automodule:: netbox.ipam
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-netbox.netbox module
---------------------
-
-.. automodule:: netbox.netbox
    :members:
    :undoc-members:
    :show-inheritance:
