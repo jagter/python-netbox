@@ -1,50 +1,69 @@
 netbox package
 ==============
 
-The ``dcim`` class
+Submodules
+----------
+
+netbox.connection module
+------------------------
+
+.. automodule:: netbox.connection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+netbox.dcim module
 ------------------
 
-.. autoclass:: netbox.dcim
+.. automodule:: netbox.dcim
    :members:
    :undoc-members:
    :show-inheritance:
 
-The ``extras`` class
+netbox.exceptions module
+------------------------
+
+.. automodule:: netbox.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+netbox.extras module
 --------------------
 
-.. autoclass:: netbox.extras
+.. automodule:: netbox.extras
    :members:
    :undoc-members:
    :show-inheritance:
 
-The ``ipam`` class
+netbox.ipam module
 ------------------
 
-.. autoclass:: netbox.ipam
+.. automodule:: netbox.ipam
    :members:
    :undoc-members:
    :show-inheritance:
 
-The ``netbox`` class
+netbox.netbox module
 --------------------
 
-.. autoclass:: netbox.netbox
+.. automodule:: netbox.netbox
    :members:
    :undoc-members:
    :show-inheritance:
 
-The ``tenancy`` class
+netbox.tenancy module
 ---------------------
 
-.. autoclass:: netbox.tenancy
+.. automodule:: netbox.tenancy
    :members:
    :undoc-members:
    :show-inheritance:
 
-The ``virtualization`` class
+netbox.virtualization module
 ----------------------------
 
-.. autoclass:: netbox.virtualization
+.. automodule:: netbox.virtualization
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,7 +72,7 @@ The ``virtualization`` class
 Module contents
 ---------------
 
-.. autoclass:: netbox
+.. automodule:: netbox
    :members:
    :undoc-members:
    :show-inheritance:
