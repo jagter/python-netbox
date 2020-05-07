@@ -413,13 +413,101 @@ class Dcim(object):
             raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
 
+    def get_power_ports(self, **kwargs):
+        """ Return power ports """
+        return self.netbox_con.get('/dcim/power-ports/', **kwargs)
+
+    def create_power_port(self, name, device_id, **kwargs):
+        """ Create a power port
+        :param name: name of the power port
+        :param device_id: ID of the device to associate power port with
+        :param kwargs: optional arguments
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        required_fields = {"name":name, "device": device_id}
+        return self.netbox_con.post('/dcim/power-ports/',required_fields, **kwargs)
+
+    def update_power_port(self, power_port_id, **kwargs):
+        """ Update a power port
+        :param power_port_id: id of power_port to update
+        :param kwargs: requests body dict
+        :return bool True if successful otherwise raise UpdateException
+         """
+        return self.netbox_con.patch('/dcim/power-ports/', power_port_id, **kwargs)
+
+    def delete_power_port(self, power_port_id):
+        """ Delete a power port by id
+        :param power_port_id: id of power port to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/power-ports/', power_port_id)
+
+    def get_power_outlets(self, **kwargs):
+        """Get power outlets matching optional kwarg filters
+        """
+        return self.netbox_con.get('/dcim/power-outlets/',**kwargs)
+
+    def create_power_outlet(self, name, device_id, **kwargs):
+        """Create a power outlet
+        :param name: name of power outlet
+        :param device_id : id of device (like a UPS) that outlet belongs to
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        required_fields = {'name':name, 'device_id':device_id}
+        return self.netbox_con.post('/dcim/power-outlets/',required_fields, **kwargs)
+
+    def update_power_outlet(self, power_outlet_id, **kwargs):
+        """ Update a power port
+        :param power_outlet_id: id of power outlet to update
+        :param kwargs: requests body dict
+        :return bool True if successful otherwise raise UpdateException
+         """
+        return self.netbox_con.patch('/dcim/power-outlets/', power_outlet_id, **kwargs)
+
+    def delete_power_outlet(self,power_outlet_id):
+        """Delete a power outlet by id
+        :param power_outlet_id: id of power outlet to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/power-outlets/',power_outlet_id)
+
+
+    def get_power_connections(self, **kwargs):
+        """ Return power connections """
+        return self.netbox_con.get('/dcim/power-connections/', **kwargs)
+
+    def create_power_connection(self, name, device_id, power_outlet_id, **kwargs):
+        """ Create a power connection
+        :param name: name of the power connection
+        :param device_id: ID of the device being powered
+        :param power_outlet_id: ID of the outlet supplying power
+        :param kwargs: optional arguments (e.g. connection_status=True)
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        required_fields = {'name':name, 'device_id': device_id, 'power_outlet_id': power_outlet_id}
+        return self.netbox_con.post('/dcim/power-connections/', required_fields, **kwargs)
+
+    def update_power_connection(self, power_connection_id, **kwargs):
+        """ Create a power connection
+        :param power_connection_id: id of the power connection being updated
+        :param kwargs: optional arguments (e.g. connection_status=True/False)
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        return self.netbox_con.patch('/dcim/power-connections/', power_connection_id, **kwargs)
+
+    def delete_power_connection(self, power_connection_id, **kwargs):
+        """ Delete a power connection by id
+        :param power_connection_id: id of power connection to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/power-connections/', power_connection_id, **kwargs)
+
     def get_interfaces(self, **kwargs):
         """Return interfaces"""
         return self.netbox_con.get('/dcim/interfaces', **kwargs)
 
     def create_interface(self, name, interface_type, device_id, **kwargs):
         """Create a new interface
-
         :param name: name of the interface
         :param interface_type: interface type. It is not possible to get the list of types from the api. Search in the netbox code for the correct type number.
         :param kwargs: optional arguments
@@ -581,3 +669,4 @@ class Dcim(object):
         except IndexError:
             raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
         return self.netbox_con.delete('/dcim/inventory-items/', inventory_item_id)
+

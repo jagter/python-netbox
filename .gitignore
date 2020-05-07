@@ -27,4 +27,5 @@ _content
 _tmp
 dist
 build
+venv
 _build
