@@ -6,7 +6,7 @@ from netbox import exceptions
 class NetboxConnection(object):
 
     def __init__(self, ssl_verify=False, use_ssl=True, host=None, auth_token=None, auth=None,
-                 port=None, api_prefix=None):
+                 port=None, api_prefix=None, extra_headers=None):
         self.use_ssl = use_ssl
         self.host = host
         self.auth_token = auth_token
@@ -30,6 +30,9 @@ class NetboxConnection(object):
 
         if auth and auth_token:
             raise ValueError('Only one authentication method is possible. Please use auth or auth_token')
+
+        if extra_headers:
+            self.session.headers.update(extra_headers)
 
     def __request(self, method, params=None, key=None, body=None, url=None):
 
