@@ -106,7 +106,7 @@ class NetboxConnection(object):
         body_data = {key: value for (key, value) in kwargs.items()}
         resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
         if resp_ok and resp_status == 200:
-            return True
+            return resp_data
         else:
             raise exceptions.UpdateException(resp_data)
 
