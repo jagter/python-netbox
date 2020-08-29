@@ -581,3 +581,15 @@ class Dcim(object):
         except IndexError:
             raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
         return self.netbox_con.delete('/dcim/inventory-items/', inventory_item_id)
+
+    def get_power_outlets(self, **kwargs):
+        """Get power outlets matching optional kwarg filters"""
+        return self.netbox_con.get('/dcim/power-outlets/', **kwargs)
+
+    def get_power_ports(self, **kwargs):
+        """Return power ports"""
+        return self.netbox_con.get('/dcim/power-ports/', **kwargs)
+
+    def get_power_connections(self, **kwargs):
+        """Return power connections """
+        return self.netbox_con.get('/dcim/power-connections/', **kwargs)
