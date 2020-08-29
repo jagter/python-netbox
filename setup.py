@@ -14,14 +14,14 @@ def readme():
 
 
 setup(name='python-netbox',
-      version='0.0.15',
+      version='0.0.16',
       description='Python NetBox Client',
       long_description=readme(),
       python_requires='>=3',
       author='Thomas van der Jagt',
       author_email='thomas@tjrb.nl',
       url='https://github.com/jagter/python-netbox',
-      download_url='https://github.com/jagter/python-netbox/releases/tag/0.0.15.tar.gz',
+      download_url='https://github.com/jagter/python-netbox/releases/tag/0.0.16.tar.gz',
       packages=find_packages(),
       install_requires=['ipaddress', 'requests'],
       classifiers = [
