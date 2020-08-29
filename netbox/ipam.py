@@ -283,7 +283,7 @@ class Ipam(object):
             role_id = self.get_roles(name=role_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('prefix/vlan role: {}'.format(role_name)) from None
-        return self.netbox_con.delete('/ipam/role/', role_id)
+        return self.netbox_con.delete('/ipam/roles/', role_id)
 
     def update_role(self, role_name, **kwargs):
         """Update prefix role
