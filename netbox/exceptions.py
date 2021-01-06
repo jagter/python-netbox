@@ -17,10 +17,14 @@ class DeleteException(BaseException):
 
 class NotFoundException(BaseException):
     """Raised when item is not found"""
-    def __init__(self, msg):
+    def __init__(self, msg, from_con=False):
         self.msg = msg
+        self.from_con = from_con
 
     def __str__(self):
+        if self.from_con:
+            return self.msg
+
         return 'Unable to found {}'.format(self.msg)
 
 
