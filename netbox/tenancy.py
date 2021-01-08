@@ -40,6 +40,14 @@ class Tenancy(object):
             raise exceptions.NotFoundException('tenant: {}'.format(tenant_name)) from None
         return self.netbox_con.delete('/tenancy/tenants/', tenant_id)
 
+    def delete_tenant_by_id(self, tenant_id):
+        """Delete tenant
+
+        :param tenant_id: Tenant to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        return self.netbox_con.delete('/tenancy/tenants/', tenant_id)
+
     def update_tenant(self, tenant_name, **kwargs):
         """Update tenant
 
@@ -51,6 +59,15 @@ class Tenancy(object):
             tenant_id = self.get_tenants(name=tenant_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('tenant: {}'.format(tenant_name)) from None
+        return self.netbox_con.patch('/tenancy/tenants/', tenant_id, **kwargs)
+
+    def update_tenant_by_id(self, tenant_id, **kwargs):
+        """Update tenant
+
+        :param tenant_id: tenant to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/tenancy/tenants/', tenant_id, **kwargs)
 
     def get_tenant_groups(self, **kwargs):
@@ -80,6 +97,14 @@ class Tenancy(object):
             raise exceptions.NotFoundException('tenant: {}'.format(tenant_group_name)) from None
         return self.netbox_con.delete('/tenancy/tenant-groups/', tenant_group_id)
 
+    def delete_tenant_group_id(self, tenant_group_id):
+        """Delete tenant
+
+        :param tenant_group_id: Tenant group to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        return self.netbox_con.delete('/tenancy/tenant-groups/', tenant_group_id)
+
     def update_tenant_group(self, tenant_group_name, **kwargs):
         """Update tenant group
 
@@ -91,4 +116,13 @@ class Tenancy(object):
             tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('tenant-group: {}'.format(tenant_group_name)) from None
+        return self.netbox_con.patch('/tenancy/tenant-groups/', tenant_group_id, **kwargs)
+
+    def update_tenant_group_by_id(self, tenant_group_id, **kwargs):
+        """Update tenant group
+
+        :param tenant_group_id: tenant group to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/tenancy/tenant-groups/', tenant_group_id, **kwargs)

@@ -33,6 +33,14 @@ class Extras(object):
             raise exceptions.NotFoundException('config-context: {}'.format(name)) from None
         return self.netbox_con.delete('/extras/config-contexts/', config_context_id)
 
+    def delete_config_context_by_id(self, config_context_id):
+        """Delete config-context
+
+        :param config_context_id: config-context to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        return self.netbox_con.delete('/extras/config-contexts/', config_context_id)
+
     def update_config_context(self, name, **kwargs):
         """Update config-context
 
@@ -45,6 +53,15 @@ class Extras(object):
         except IndexError:
             raise exceptions.NotFoundException('config-context: {}'.format(name)) from None
 
+        return self.netbox_con.patch('/extras/config-contexts/', config_context_id, **kwargs)
+
+    def update_config_context_by_id(self, config_context_id, **kwargs):
+        """Update config-context
+
+        :param config_context_id: config-context to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/extras/config-contexts/', config_context_id, **kwargs)
 
     def get_tags(self, **kwargs):
@@ -74,6 +91,14 @@ class Extras(object):
             raise exceptions.NotFoundException('tag: {}'.format(name)) from None
         return self.netbox_con.delete('/extras/tags/', tag_id)
 
+    def delete_tag_by_id(self, tag_id):
+        """Delete tag
+
+        :param tag_id: tag to delete
+        :return: bool True if succesful otherwase delete exception
+        """
+        return self.netbox_con.delete('/extras/tags/', tag_id)
+
     def update_tag(self, name, **kwargs):
         """Update tag
 
@@ -86,6 +111,15 @@ class Extras(object):
         except IndexError:
             raise exceptions.NotFoundException('tag: {}'.format(name)) from None
 
+        return self.netbox_con.patch('/extras/tags/', tag_id, **kwargs)
+
+    def update_tag_by_id(self, tag_id, **kwargs):
+        """Update tag
+
+        :param tag_id: tag id
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/extras/tags/', tag_id, **kwargs)
 
     def get_object_changes(self, **kwargs):

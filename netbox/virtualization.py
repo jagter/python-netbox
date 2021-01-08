@@ -45,6 +45,14 @@ class Virtualization(object):
             raise exceptions.NotFoundException('cluster {}'.format(name)) from None
         return self.netbox_con.delete('/virtualization/clusters/', cluster_id)
 
+    def delete_cluster_by_id(self, cluster_id):
+        """Delete a cluster
+
+        :param cluster_id: cluster to delete
+        :return: netbox object if succesful otherwase delete exception
+        """
+        return self.netbox_con.delete('/virtualization/clusters/', cluster_id)
+
     def update_cluster(self, name, **kwargs):
         """Update cluster
 
@@ -56,6 +64,15 @@ class Virtualization(object):
             cluster_id = self.get_clusters(name=name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('cluster: {}'.format(name)) from None
+        return self.netbox_con.patch('/virtualization/clusters/', cluster_id, **kwargs)
+
+    def update_cluster_by_id(self, cluster_id, **kwargs):
+        """Update cluster
+
+        :param kwargs: filter arguments
+        :param cluster_id: cluster to update
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/virtualization/clusters/', cluster_id, **kwargs)
 
     def get_cluster_types(self, **kwargs):
@@ -85,6 +102,15 @@ class Virtualization(object):
             raise exceptions.NotFoundException(name) from None
         return self.netbox_con.patch('/virtualization/cluster-types/', type_id, **kwargs)
 
+    def update_cluster_type_by_id(self, cluster_type_id, **kwargs):
+        """Update cluster type
+
+        :param cluster_type_id: ID of the cluster type
+        :param kwargs: fields to update
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        return self.netbox_con.patch('/virtualization/cluster-types/', cluster_type_id, **kwargs)
+
     def delete_cluster_type(self, name):
         """Delete a cluster type
 
@@ -95,6 +121,14 @@ class Virtualization(object):
             cluster_type_id = self.get_cluster_types(name=name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('cluster-type: {}'.format(name)) from None
+        return self.netbox_con.delete('/virtualization/cluster-types/', cluster_type_id)
+
+    def delete_cluster_type_by_id(self, cluster_type_id):
+        """Delete a cluster type
+
+        :param cluster_type_id: cluster type to delete
+        :return: bool True if succesful otherwase delete exception
+        """
         return self.netbox_con.delete('/virtualization/cluster-types/', cluster_type_id)
 
     def get_interfaces(self, **kwargs):
@@ -134,6 +168,15 @@ class Virtualization(object):
                                                .format(name, virtual_machine)) from None
         return self.netbox_con.patch('/virtualization/interfaces/', interface_id, **kwargs)
 
+    def update_interface_by_id(self, interface_id, **kwargs):
+        """Update virtual_machine interface
+
+        :param interface_id: id the interface to update
+        :param kwargs: update data
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        return self.netbox_con.patch('/virtualization/interfaces/', interface_id, **kwargs)
+
     def delete_interface(self, name, virtual_machine):
         """Delete interface from virtual_machine
 
@@ -147,6 +190,14 @@ class Virtualization(object):
             raise exceptions.NotFoundException('interface: {} or virtual_machine {}'
                                                .format(name, virtual_machine)) from None
 
+        return self.netbox_con.delete('/virtualization/interfaces/', interface_id)
+
+    def delete_interface_by_id(self, interface_id):
+        """Delete interface from virtual_machine
+
+        :param interface_id: interface to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
         return self.netbox_con.delete('/virtualization/interfaces/', interface_id)
 
     def get_virtual_machines(self, **kwargs):
@@ -184,6 +235,14 @@ class Virtualization(object):
             raise exceptions.NotFoundException('virtual-machine: {}'.format(virtual_machine_name)) from None
         return self.netbox_con.delete('/virtualization/virtual-machines/', virtual_machine_id)
 
+    def delete_virtual_machine_by_id(self, virtual_machine_id):
+        """Delete virtual machine
+
+        :param virtual_machine_id: virtual machine to delete
+        :return: bool True if successful otherwise raise exception
+        """
+        return self.netbox_con.delete('/virtualization/virtual-machines/', virtual_machine_id)
+
     def update_virtual_machine(self, virtual_machine_name, **kwargs):
         """Update virtual-machine
 
@@ -196,4 +255,13 @@ class Virtualization(object):
         except IndexError:
             raise exceptions.NotFoundException('virtual-machine: {}'
                                                .format(virtual_machine_name)) from None
+        return self.netbox_con.patch('/virtualization/virtual-machines/', virtual_machine_id, **kwargs)
+
+    def update_virtual_machine_by_id(self, virtual_machine_id, **kwargs):
+        """Update virtual-machine
+
+        :param virtual_machine_id: virtual-machine to update
+        :param kwargs: update data
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/virtualization/virtual-machines/', virtual_machine_id, **kwargs)

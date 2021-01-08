@@ -105,10 +105,14 @@ class NetboxConnection(object):
 
         body_data = {key: value for (key, value) in kwargs.items()}
         resp_ok, resp_status, resp_data = self.__request('PATCH', params=params, key=key, body=body_data)
+
         if resp_ok and resp_status == 200:
             return resp_data
-        else:
-            raise exceptions.UpdateException(resp_data)
+
+        if resp_status == 404:
+            raise exceptions.NotFoundException("object not found with id {}".format(key), from_con=True)
+
+        raise exceptions.UpdateException(resp_data)
 
     def post(self, params, required_fields, **kwargs):
 
@@ -129,8 +133,11 @@ class NetboxConnection(object):
         resp_ok, resp_status, resp_data = self.__request('DELETE', del_str)
         if resp_ok and resp_status == 204:
             return True
-        else:
-            raise exceptions.DeleteException(resp_data)
+
+        if resp_status == 404:
+            raise exceptions.NotFoundException("Unable to found object with id {}".format(del_id), from_con=True)
+
+        raise exceptions.DeleteException(resp_data)
 
     def close(self):
 

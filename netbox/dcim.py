@@ -32,12 +32,20 @@ class Dcim(object):
         """Delete region
 
         :param region_name: Region to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise raise exception
         """
         try:
             region_id = self.get_regions(name=region_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+        return self.netbox_con.delete('/dcim/regions/', region_id)
+
+    def delete_region_by_id(self, region_id):
+        """Delete region
+
+        :param region_id: Region to delete
+        :return: bool True if succesful otherwise raise delete exception
+        """
         return self.netbox_con.delete('/dcim/regions/', region_id)
 
     def update_region(self, region_name, **kwargs):
@@ -51,6 +59,15 @@ class Dcim(object):
             region_id = self.get_regions(name=region_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+        return self.netbox_con.patch('/dcim/regions/', region_id, **kwargs)
+
+    def update_region_id(self, region_id, **kwargs):
+        """Update Region by id
+
+        :param region_id: Region to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.patch('/dcim/regions/', region_id, **kwargs)
 
     def get_sites(self, **kwargs):
@@ -80,6 +97,14 @@ class Dcim(object):
             raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
         return self.netbox_con.delete('/dcim/sites/', site_id)
 
+    def delete_site_by_id(self, site_id):
+        """Delete site
+
+        :param site_id: Site to delete
+        :return: bool True if succesful otherwase raise exception
+        """
+        return self.netbox_con.delete('/dcim/sites/', site_id)
+
     def update_site(self, site_name, **kwargs):
         """
 
@@ -91,6 +116,15 @@ class Dcim(object):
             site_id = self.get_sites(name=site_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+        return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
+
+    def update_site_by_id(self, site_id, **kwargs):
+        """Update a site by id
+
+        :param site_id: Site to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
     def get_racks(self, **kwargs):
@@ -124,10 +158,18 @@ class Dcim(object):
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
         return self.netbox_con.delete('/dcim/racks/', rack_id)
 
+    def delete_rack_by_id(self, rack_id):
+        """Delete rack
+
+        :param rack_id: Rack to delete
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.delete('/dcim/racks/', rack_id)
+
     def update_rack(self, rack_name, **kwargs):
         """
 
-        :param rack_name: rack_name name to update
+        :param rack_name: Rack to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -135,6 +177,15 @@ class Dcim(object):
             rack_id = self.get_racks(facility_id=rack_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
+        return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
+
+    def update_rack_by_id(self, rack_id, **kwargs):
+        """
+
+        :param rack_id: Rack group to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
 
     def get_rack_groups(self, **kwargs):
@@ -169,10 +220,18 @@ class Dcim(object):
             raise exceptions.NotFoundException('rack-group: {}'.format(name)) from None
         return self.netbox_con.delete('/dcim/rack-groups/', rack_group_id)
 
+    def delete_rack_group_by_id(self, rack_group_id):
+        """Delete rack group
+
+        :param rack_group_id: Rack group to delete
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.delete('/dcim/rack-groups/', rack_group_id)
+
     def update_rack_group(self, name, **kwargs):
         """
 
-        :param name: Rack group name to update
+        :param name: Rack group to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -180,6 +239,15 @@ class Dcim(object):
             rack_group_id = self.get_rack_groups(name=name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('rack group: {}'.format(name)) from None
+        return self.netbox_con.patch('/dcim/rack-groups/', rack_group_id, **kwargs)
+
+    def update_rack_group_by_id(self, rack_group_id, **kwargs):
+        """
+
+        :param rack_group_id: Rack group to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.patch('/dcim/rack-groups/', rack_group_id, **kwargs)
 
     def get_devices(self, **kwargs):
@@ -230,7 +298,7 @@ class Dcim(object):
         return self.netbox_con.post('/dcim/devices/', required_fields, **kwargs)
 
     def delete_device(self, device_name):
-        """Delete device by name
+        """Delete device by device name
 
         :param device_name: Device to delete
         :return: bool True if successful otherwise raise DeleteException
@@ -241,6 +309,14 @@ class Dcim(object):
             raise exceptions.NotFoundException('device: {}'.format(device_name)) from None
         return self.netbox_con.delete('/dcim/devices/', device_id)
 
+    def delete_device_by_id(self, device_id):
+        """Delete device
+
+        :param device_id: Device to delete
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.delete('/dcim/devices/', device_id)
+
     def update_device(self, device_name, **kwargs):
         """Update device by device name
 
@@ -249,6 +325,15 @@ class Dcim(object):
         :return: bool True if successful otherwise raise UpdateException
         """
         device_id = self.get_devices(name=device_name)[0]['id']
+        return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
+
+    def update_device_by_id(self, device_id, **kwargs):
+        """Update device by id
+
+        :param device_id: Device to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/dcim/devices/', device_id, **kwargs)
 
     def get_device_types(self, **kwargs):
@@ -270,7 +355,7 @@ class Dcim(object):
     def update_device_type(self, device_type, **kwargs):
         """Update device type
 
-        :param device_type: device-type name to update
+        :param device_type: device-type to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -278,6 +363,15 @@ class Dcim(object):
             device_type_id = self.get_device_types(model=device_type)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-type: {}'.format(device_type)) from None
+        return self.netbox_con.patch('/dcim/device-types/', device_type_id, **kwargs)
+
+    def update_device_type_by_id(self, device_type_id, **kwargs):
+        """Update device type
+
+        :param device_type_id: device-type to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
         return self.netbox_con.patch('/dcim/device-types/', device_type_id, **kwargs)
 
     def delete_device_type(self, model_name):
@@ -290,6 +384,14 @@ class Dcim(object):
             device_type_id = self.get_device_types(model=model_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-type: {}'.format(model_name)) from None
+        return self.netbox_con.delete('/dcim/device-types/', device_type_id)
+
+    def delete_device_type_by_id(self, device_type_id):
+        """Delete device type
+
+        :param device_type_id: Id of the device-type to delete
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.delete('/dcim/device-types/', device_type_id)
 
     def get_device_roles(self, **kwargs):
@@ -311,7 +413,7 @@ class Dcim(object):
     def update_device_role(self, device_role, **kwargs):
         """Update device role
 
-        :param device_role: device-type name to update
+        :param device_role: device-role to update
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
@@ -319,6 +421,15 @@ class Dcim(object):
             device_role_id = self.get_device_roles(name=device_role)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
+        return self.netbox_con.patch('/dcim/device-roles/', device_role_id, **kwargs)
+
+    def update_device_role_by_id(self, device_role_id, **kwargs):
+        """Update device role
+
+        :param device_role_id: device role to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.patch('/dcim/device-roles/', device_role_id, **kwargs)
 
     def delete_device_role(self, device_role):
@@ -331,6 +442,14 @@ class Dcim(object):
             device_role_id = self.get_device_roles(name=device_role)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('device-role: {}'.format(device_role)) from None
+        return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
+
+    def delete_device_role_by_id(self, device_role_id):
+        """Delete device role
+
+        :param device_role_id: device role to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
         return self.netbox_con.delete('/dcim/device-roles/', device_role_id)
 
     def get_manufacturers(self, **kwargs):
@@ -361,6 +480,15 @@ class Dcim(object):
             raise exceptions.NotFoundException('manufacturer: {}'.format(manufacturer_name)) from None
         return self.netbox_con.patch('/dcim/manufacturer/', manufacturer_id, **kwargs)
 
+    def update_manufacturer_by_id(self, manufacturer_id, **kwargs):
+        """Update manufacturer
+
+        :param manufacturer_id: manufacturer to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/manufacturer/', manufacturer_id, **kwargs)
+
     def delete_manufacturer(self, manufacturer_name):
         """Delete manufacturer
 
@@ -371,6 +499,14 @@ class Dcim(object):
             manufacturer_id = self.get_manufacturers(name=manufacturer_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('manufacturer: {}'.format(manufacturer_name)) from None
+        return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
+
+    def delete_manufacturer_id(self, manufacturer_id):
+        """Delete manufacturer
+
+        :param manufacturer_id: manufacturer to delete
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.delete('/dcim/manufacturers/', manufacturer_id)
 
     def get_platforms(self, **kwargs):
@@ -401,6 +537,15 @@ class Dcim(object):
             raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
         return self.netbox_con.patch('/dcim/platforms/', platform_id, **kwargs)
 
+    def update_platform_by_id(self, platform_id, **kwargs):
+        """Update platform
+
+        :param platform_id: platform to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/platforms/', platform_id, **kwargs)
+
     def delete_platform(self, platform_name):
         """Delete platform
 
@@ -411,6 +556,14 @@ class Dcim(object):
             platform_id = self.get_platforms(name=platform_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('platform: {}'.format(platform_name)) from None
+        return self.netbox_con.delete('/dcim/platforms/', platform_id)
+
+    def delete_platform_by_id(self, platform_id):
+        """Delete platform
+
+        :param platform_id: platform to delete
+        :return: bool True if successful otherwise raise Exception
+        """
         return self.netbox_con.delete('/dcim/platforms/', platform_id)
 
     def get_interfaces(self, **kwargs):
@@ -443,6 +596,15 @@ class Dcim(object):
             raise exceptions.NotFoundException('interface: {}'.format(interface)) from None
         return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
 
+    def update_interface_by_id(self, interface_id, **kwargs):
+        """Update interface
+
+        :param interface_id: interface to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/interfaces/', interface_id, **kwargs)
+
     def delete_interface(self, interface_name, device):
         """Delete interface
 
@@ -454,6 +616,14 @@ class Dcim(object):
             interface_id = self.get_interfaces(name=interface_name, device=device)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface: {}'.format(interface_name)) from None
+        return self.netbox_con.delete('/dcim/interfaces/', interface_id)
+
+    def delete_interface_by_id(self, interface_id):
+        """Delete interface
+
+        :param interface_id: interface to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
         return self.netbox_con.delete('/dcim/interfaces/', interface_id)
 
     def get_interface_connections(self, **kwargs):
@@ -484,7 +654,7 @@ class Dcim(object):
         return self.netbox_con.delete('/dcim/interface-connections/', interface_connection_id)
 
     def update_interface_connection(self, interface_connection_id, **kwargs):
-        """Update interface
+        """Update interface connection
 
         :param interface_connection_id: interface_connection to update
         :param kwargs: requests body dict
@@ -499,7 +669,7 @@ class Dcim(object):
     def create_interface_template(self, name, device_type, **kwargs):
         """Create a new interface template
 
-        :param name: name of the interface
+        :param name: rack_grounamep_id of the interface
         :param kwargs: optional arguments
         :param device_type: name of the device_type to associate template with
         :return: netbox object if successful otherwise raise CreateException
@@ -524,6 +694,15 @@ class Dcim(object):
             raise exceptions.NotFoundException('interface: {}'.format(interface_template_name)) from None
         return self.netbox_con.patch('/dcim/interface-templates/', interface_template_id, **kwargs)
 
+    def update_interface_template_by_id(self, interface_template_id, **kwargs):
+        """Update interface template
+
+        :param interface_template_id: interface template to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/interface-templates/', interface_template_id, **kwargs)
+
     def delete_interface_template(self, interface_template_name):
         """Delete interface template
 
@@ -534,6 +713,14 @@ class Dcim(object):
             interface_template_id = self.get_interface_templates(name=interface_template_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('interface-template: {}'.format(interface_template_name)) from None
+        return self.netbox_con.delete('/dcim/interface-templates/', interface_template_id)
+
+    def delete_interface_template_by_id(self, interface_template_id):
+        """Delete interface template
+
+        :param interface_template_id: Name of interface template to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
         return self.netbox_con.delete('/dcim/interface-templates/', interface_template_id)
 
     def get_inventory_items(self, **kwargs):
@@ -569,6 +756,15 @@ class Dcim(object):
             raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
         return self.netbox_con.patch('/dcim/inventory-items/', inventory_item_id, **kwargs)
 
+    def update_inventory_item_by_id(self, inventory_item_id, **kwargs):
+        """Update inventory item
+
+        :param inventory_item_id: Inventory item to delete
+        :param kwargs: Extra inventory items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/inventory-items/', inventory_item_id, **kwargs)
+
     def delete_inventory_item(self, name, device_name):
         """Delete inventory item
 
@@ -580,6 +776,14 @@ class Dcim(object):
             inventory_item_id = self.get_inventory_items(name=name, device=device_name)[0]['id']
         except IndexError:
             raise exceptions.NotFoundException('inventory item: {}'.format(name)) from None
+        return self.netbox_con.delete('/dcim/inventory-items/', inventory_item_id)
+
+    def delete_inventory_item_by_id(self, inventory_item_id):
+        """Delete inventory item
+
+        :param inventory_item_id: Name of inventory item to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
         return self.netbox_con.delete('/dcim/inventory-items/', inventory_item_id)
 
     def get_power_outlets(self, **kwargs):
