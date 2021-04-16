@@ -1,10 +1,11 @@
 class GeneralException(BaseException):
     def __init__(self, resp_data):
+        print(resp_data)
         if isinstance(resp_data, dict):
             if 'detail' in resp_data:
                 self.err = resp_data['detail']
             else:
-                self.err = ''.join('{} '.format(val[0]) for key, val in resp_data.items())
+                self.err = ''.join('{} '.format(val) for key, val in resp_data.items())
         else:
             self.err = 'Unknown Error, please check the Netbox logs'
 
@@ -20,7 +21,8 @@ class DeleteException(GeneralException):
 
 class NotFoundException(GeneralException):
     """Raised when item is not found"""
-    pass
+    def __init__(self, resp_data):
+        super().__init__(resp_data)
 
 
 class GetException(GeneralException):

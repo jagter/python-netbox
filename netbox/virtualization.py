@@ -28,7 +28,7 @@ class Virtualization(object):
         try:
             cluster_type_id = self.get_cluster_types(name=type)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cluster-type: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "cluster-type: {}".format(name)}) from None
 
         required_fields = {"name": name, "type": cluster_type_id}
         return self.netbox_con.post('/virtualization/clusters/', required_fields, **kwargs)
@@ -42,7 +42,7 @@ class Virtualization(object):
         try:
             cluster_id = self.get_clusters(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cluster {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "cluster {}".format(name)}) from None
         return self.netbox_con.delete('/virtualization/clusters/', cluster_id)
 
     def delete_cluster_by_id(self, cluster_id):
@@ -63,7 +63,7 @@ class Virtualization(object):
         try:
             cluster_id = self.get_clusters(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cluster: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "cluster: {}".format(name)}) from None
         return self.netbox_con.patch('/virtualization/clusters/', cluster_id, **kwargs)
 
     def update_cluster_by_id(self, cluster_id, **kwargs):
@@ -99,7 +99,7 @@ class Virtualization(object):
         try:
             type_id = self.get_cluster_types(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException(name) from None
+            raise exceptions.NotFoundException({"detail": "cluster-type: {}".format(name)}) from None
         return self.netbox_con.patch('/virtualization/cluster-types/', type_id, **kwargs)
 
     def update_cluster_type_by_id(self, cluster_type_id, **kwargs):
@@ -120,7 +120,7 @@ class Virtualization(object):
         try:
             cluster_type_id = self.get_cluster_types(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cluster-type: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "cluster-type: {}".format(name)}) from None
         return self.netbox_con.delete('/virtualization/cluster-types/', cluster_type_id)
 
     def delete_cluster_type_by_id(self, cluster_type_id):
@@ -149,7 +149,7 @@ class Virtualization(object):
         try:
             virtual_machine_id = self.get_virtual_machine(name=virtual_machine)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('virtual-machine: {}'.format(virtual_machine)) from None
+            raise exceptions.NotFoundException({"detail": "virtual-machine: {}".format(virtual_machine)}) from None
         required_fields = {"name": name, "virtual_machine": virtual_machine_id}
         return self.netbox_con.post('/virtualization/interfaces/', required_fields, **kwargs)
 
@@ -164,8 +164,8 @@ class Virtualization(object):
         try:
             interface_id = self.get_interface(name=name, virtual_machine=virtual_machine)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('interface: {} or virtual_machine: {}'
-                                               .format(name, virtual_machine)) from None
+            raise exceptions.NotFoundException({"detail": "interface: {} or virtual_machine: {}"
+                                               .format(name, virtual_machine)}) from None
         return self.netbox_con.patch('/virtualization/interfaces/', interface_id, **kwargs)
 
     def update_interface_by_id(self, interface_id, **kwargs):
@@ -187,8 +187,8 @@ class Virtualization(object):
         try:
             interface_id = self.get_interface(name=name, virtual_machine=virtual_machine)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('interface: {} or virtual_machine {}'
-                                               .format(name, virtual_machine)) from None
+            raise exceptions.NotFoundException({"detail": "interface: {} or virtual_machine {}"
+                                               .format(name, virtual_machine)}) from None
 
         return self.netbox_con.delete('/virtualization/interfaces/', interface_id)
 
@@ -218,7 +218,7 @@ class Virtualization(object):
         try:
             cluster_id = self.get_clusters(name=cluster_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cluster-name: {}'.format(cluster_name)) from None
+            raise exceptions.NotFoundException({"detail": "cluster-name: {}".format(cluster_name)}) from None
 
         required_fields = {"name": name, "cluster": cluster_id}
         return self.netbox_con.post('/virtualization/virtual-machines/', required_fields, **kwargs)
@@ -232,7 +232,7 @@ class Virtualization(object):
         try:
             virtual_machine_id = self.get_virtual_machines(name=virtual_machine_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('virtual-machine: {}'.format(virtual_machine_name)) from None
+            raise exceptions.NotFoundException({"detail": "virtual-machine: {}".format(virtual_machine_name)}) from None
         return self.netbox_con.delete('/virtualization/virtual-machines/', virtual_machine_id)
 
     def delete_virtual_machine_by_id(self, virtual_machine_id):
@@ -253,8 +253,8 @@ class Virtualization(object):
         try:
             virtual_machine_id = self.get_virtual_machines(name=virtual_machine_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('virtual-machine: {}'
-                                               .format(virtual_machine_name)) from None
+            raise exceptions.NotFoundException({"detail": "virtual-machine: {}"
+                                               .format(virtual_machine_name)}) from None
         return self.netbox_con.patch('/virtualization/virtual-machines/', virtual_machine_id, **kwargs)
 
     def update_virtual_machine_by_id(self, virtual_machine_id, **kwargs):

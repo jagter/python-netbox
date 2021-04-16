@@ -30,7 +30,7 @@ class Extras(object):
         try:
             config_context_id = self.get_config_contexts(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('config-context: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "config-context: {}".format(name)}) from None
         return self.netbox_con.delete('/extras/config-contexts/', config_context_id)
 
     def delete_config_context_by_id(self, config_context_id):
@@ -51,7 +51,7 @@ class Extras(object):
         try:
             config_context_id = self.get_config_contexts(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('config-context: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "config-context: {}".format(name)}) from None
 
         return self.netbox_con.patch('/extras/config-contexts/', config_context_id, **kwargs)
 
@@ -88,7 +88,7 @@ class Extras(object):
         try:
             tag_id = self.get_tags(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tag: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "tag: {}".format(name)}) from None
         return self.netbox_con.delete('/extras/tags/', tag_id)
 
     def delete_tag_by_id(self, tag_id):
@@ -109,7 +109,7 @@ class Extras(object):
         try:
             tag_id = self.get_tags(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tag: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "tag: {}".format(name)}) from None
 
         return self.netbox_con.patch('/extras/tags/', tag_id, **kwargs)
 

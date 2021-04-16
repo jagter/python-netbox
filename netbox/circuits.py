@@ -34,12 +34,12 @@ class Circuits(object):
         try:
             provider_id = self.get_providers(name=circuit_provider)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('cirtcuit provider: {}'.format(circuit_provider)) from None
+            raise exceptions.NotFoundException({"detail": "cirtcuit provider: {}".format(circuit_provider)}) from None
 
         try:
             type_id = self.get_types(name=circuit_type)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit type: {}'.format(circuit_type)) from None
+            raise exceptions.NotFoundException({"detail": "circuit type: {}".format(circuit_type)}) from None
 
         required_fields = {"provider": provider_id, "circuit": cid, "type": type_id,
                            "status": status_id}
@@ -55,7 +55,7 @@ class Circuits(object):
         try:
             circuits_id = self.get_circuits(cid=cid, provider=provider)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('Circuit with circuit: {} and provider: {}'.format(cid, provider)) from None
+            raise exceptions.NotFoundException({"detail": "Circuit with circuit: {} and provider: {}".format(cid, provider)}) from None
         return self.netbox_con.delete('/circuits/circuits/', circuits_id)
 
     def update_circuit(self, cid, provider, **kwargs):
@@ -69,7 +69,7 @@ class Circuits(object):
         try:
             circuits_id = self.get_circuits(cid=cid, provider=provider)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('Circuit with circuit: {} and provider {}'.format(cid, provider)) from None
+            raise exceptions.NotFoundException({"detail": "Circuit with circuit: {} and provider {}".format(cid, provider)}) from None
         return self.netbox_con.patch('/circuits/circuits/', circuits_id, **kwargs)
 
     def get_providers(self, **kwargs):
@@ -95,7 +95,7 @@ class Circuits(object):
         try:
             circuits_provider_id = self.get_providers(name=provider_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit provider: {}'.format(provider_name)) from None
+            raise exceptions.NotFoundException({"detail": "circuit provider: {}".format(provider_name)}) from None
         return self.netbox_con.delete('/circuits/providers/', circuits_provider_id)
 
     def update_provider(self, provider_name, **kwargs):
@@ -108,7 +108,7 @@ class Circuits(object):
         try:
             circuits_provider_id = self.get_providers(name=provider_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit provider: {}'.format(provider_name)) from None
+            raise exceptions.NotFoundException({"detail": "circuit provider: {}".format(provider_name)}) from None
         return self.netbox_con.patch('/circuits/providers/', circuits_provider_id, **kwargs)
 
     def get_types(self, **kwargs):
@@ -134,7 +134,7 @@ class Circuits(object):
         try:
             circuits_type_id = self.get_types(name=type_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit type: {}'.format(type_name)) from None
+            raise exceptions.NotFoundException({"detail": "circuit type: {}".format(type_name)}) from None
         return self.netbox_con.delete('/circuits/circuit-types/', circuits_type_id)
 
     def update_type(self, circuit_type_name, **kwargs):
@@ -147,7 +147,7 @@ class Circuits(object):
         try:
             type_id = self.get_types(name=circuit_type_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit type: {}'.format(circuit_type_name)) from None
+            raise exceptions.NotFoundException({"detail": "circuit type: {}".format(circuit_type_name)}) from None
         return self.netbox_con.patch('/circuits/circuit-types/', type_id, **kwargs)
 
     def get_terminations(self, **kwargs):
@@ -166,7 +166,7 @@ class Circuits(object):
         try:
             site_id = self.dcim.get_sites(name=site)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site)}) from None
 
         required_fields = {"circuit": circuit, "term_side": term_side, "site": site_id, "port_speed": port_speed}
         return self.netbox_con.post('/circuits/circuit-terminations/', required_fields, **kwargs)
@@ -183,13 +183,13 @@ class Circuits(object):
         try:
             site_id = self.dcim.get_sites(name=site)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site)}) from None
 
         try:
             circuit_termination = self.get_terminations(circuit_id=circuit, term_side=term_side, site_id=site_id,
                                                         port_speed=port_speed)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit termination with given arguments') from None
+            raise exceptions.NotFoundException({"detail": "circuit termination with given arguments"}) from None
 
         return self.netbox_con.delete('/circuits/circuit-terminations/', circuit_termination)
 
@@ -206,12 +206,12 @@ class Circuits(object):
         try:
             site_id = self.dcim.get_sites(name=site)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site)}) from None
 
         try:
             circuit_termination_id = self.get_terminations(circuit_id=circuit, term_side=term_side, site_id=site_id,
                                                            port_speed=port_speed)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('circuit termination with given arguments') from None
+            raise exceptions.NotFoundException({"detail" "circuit termination with given arguments"}) from None
 
         return self.netbox_con.patch('/circuits/circuit-terminations/', circuit_termination_id, **kwargs)

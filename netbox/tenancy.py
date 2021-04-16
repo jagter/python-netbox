@@ -37,7 +37,7 @@ class Tenancy(object):
         try:
             tenant_id = self.get_tenants(name=tenant_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tenant: {}'.format(tenant_name)) from None
+            raise exceptions.NotFoundException({"detail": "tenant: {}".format(tenant_name)}) from None
         return self.netbox_con.delete('/tenancy/tenants/', tenant_id)
 
     def delete_tenant_by_id(self, tenant_id):
@@ -58,7 +58,7 @@ class Tenancy(object):
         try:
             tenant_id = self.get_tenants(name=tenant_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tenant: {}'.format(tenant_name)) from None
+            raise exceptions.NotFoundException({"detail": "tenant: {}".format(tenant_name)}) from None
         return self.netbox_con.patch('/tenancy/tenants/', tenant_id, **kwargs)
 
     def update_tenant_by_id(self, tenant_id, **kwargs):
@@ -94,7 +94,7 @@ class Tenancy(object):
         try:
             tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tenant: {}'.format(tenant_group_name)) from None
+            raise exceptions.NotFoundException({"detail": "tenant: {}".format(tenant_group_name)}) from None
         return self.netbox_con.delete('/tenancy/tenant-groups/', tenant_group_id)
 
     def delete_tenant_group_id(self, tenant_group_id):
@@ -115,7 +115,7 @@ class Tenancy(object):
         try:
             tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('tenant-group: {}'.format(tenant_group_name)) from None
+            raise exceptions.NotFoundException({"detail:": "tenant-group: {}".format(tenant_group_name)}) from None
         return self.netbox_con.patch('/tenancy/tenant-groups/', tenant_group_id, **kwargs)
 
     def update_tenant_group_by_id(self, tenant_group_id, **kwargs):
