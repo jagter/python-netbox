@@ -1,6 +1,5 @@
 class GeneralException(BaseException):
     def __init__(self, resp_data):
-        print(resp_data)
         if isinstance(resp_data, dict):
             if 'detail' in resp_data:
                 self.err = resp_data['detail']
