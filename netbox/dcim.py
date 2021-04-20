@@ -37,7 +37,7 @@ class Dcim(object):
         try:
             region_id = self.get_regions(name=region_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+            raise exceptions.NotFoundException({"detail": "region: {}".format(region_name)}) from None
         return self.netbox_con.delete('/dcim/regions/', region_id)
 
     def delete_region_by_id(self, region_id):
@@ -58,7 +58,7 @@ class Dcim(object):
         try:
             region_id = self.get_regions(name=region_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('region: {}'.format(region_name)) from None
+            raise exceptions.NotFoundException({"detail": "region: {}".format(region_name)}) from None
         return self.netbox_con.patch('/dcim/regions/', region_id, **kwargs)
 
     def update_region_id(self, region_id, **kwargs):
@@ -94,7 +94,7 @@ class Dcim(object):
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site_name)}) from None
         return self.netbox_con.delete('/dcim/sites/', site_id)
 
     def delete_site_by_id(self, site_id):
@@ -115,7 +115,7 @@ class Dcim(object):
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site_name)}) from None
         return self.netbox_con.patch('/dcim/sites/', site_id, **kwargs)
 
     def update_site_by_id(self, site_id, **kwargs):
@@ -142,7 +142,7 @@ class Dcim(object):
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site_name)}) from None
         required_fields = {"name": name, "site": site_id}
         return self.netbox_con.post('/dcim/racks/', required_fields, **kwargs)
 
@@ -155,7 +155,7 @@ class Dcim(object):
         try:
             rack_id = self.get_racks(name=rack_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
+            raise exceptions.NotFoundException({"detail": "rack: {}".format(rack_name)}) from None
         return self.netbox_con.delete('/dcim/racks/', rack_id)
 
     def delete_rack_by_id(self, rack_id):
@@ -176,7 +176,7 @@ class Dcim(object):
         try:
             rack_id = self.get_racks(facility_id=rack_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
+            raise exceptions.NotFoundException({"detail": "rack: {}".format(rack_name)}) from None
         return self.netbox_con.patch('/dcim/racks/', rack_id, **kwargs)
 
     def update_rack_by_id(self, rack_id, **kwargs):
@@ -204,7 +204,7 @@ class Dcim(object):
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('site: {}'.format(site_name)) from None
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site_name)}) from None
         required_fields = {"name": name, "slug": slug, "site": site_id}
         return self.netbox_con.post('/dcim/rack-groups/', required_fields, **kwargs)
 
@@ -217,7 +217,7 @@ class Dcim(object):
         try:
             rack_group_id = self.get_rack_groups(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('rack-group: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "rack-group: {}".format(name)}) from None
         return self.netbox_con.delete('/dcim/rack-groups/', rack_group_id)
 
     def delete_rack_group_by_id(self, rack_group_id):
@@ -238,7 +238,7 @@ class Dcim(object):
         try:
             rack_group_id = self.get_rack_groups(name=name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('rack group: {}'.format(name)) from None
+            raise exceptions.NotFoundException({"detail": "rack group: {}".format(name)}) from None
         return self.netbox_con.patch('/dcim/rack-groups/', rack_group_id, **kwargs)
 
     def update_rack_group_by_id(self, rack_group_id, **kwargs):
@@ -263,7 +263,7 @@ class Dcim(object):
         try:
             rack_id = self.get_racks(name=rack_name)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException('rack: {}'.format(rack_name)) from None
+            raise exceptions.NotFoundException({"detail": "rack: {}".format(rack_name)}) from None
         return self.netbox_con.get('/dcim/devices', rack_id=rack_id, **kwargs)
 
     def create_device(self, name, device_role, site_name, device_type, **kwargs):

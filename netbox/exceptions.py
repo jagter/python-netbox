@@ -4,7 +4,7 @@ class GeneralException(BaseException):
             if 'detail' in resp_data:
                 self.err = resp_data['detail']
             else:
-                self.err = ''.join('{} '.format(val) for key, val in resp_data.items())
+                self.err = ''.join('{} '.format(val[0]) for key, val in resp_data.items())
         else:
             self.err = 'Unknown Error, please check the Netbox logs'
 

@@ -1,6 +1,7 @@
 import requests
-from netbox import exceptions
 import json
+import urllib.parse
+from netbox import exceptions
 
 
 class NetboxConnection(object):
@@ -67,6 +68,9 @@ class NetboxConnection(object):
         if not 200 <= response.status_code < 300:
             self.__raise_error(response.status_code, response.content)
 
+        if response.status_code == 204:
+            return response.content
+
         try:
             response_data = response.json()
         except json.JSONDecodeError:
@@ -78,7 +82,7 @@ class NetboxConnection(object):
 
         if kwargs:
             url = '{}{}?{}&limit={}'.format(self.base_url, param,
-                                            '&'.join('{}={}'.format(key, val) for key, val in kwargs.items()), limit)
+                                            '&'.join('{}={}'.format(key, urllib.parse.quote(val)) for key, val in kwargs.items()), limit)
         elif key:
             if '_choices' in param:
                 url = '{}{}{}/?limit={}'.format(self.base_url, param, key, limit)
@@ -108,7 +112,6 @@ class NetboxConnection(object):
 
         if kwargs:
             body_data.update({key: value for (key, value) in kwargs.items()})
-
         resp_data = self.__request('POST', params=params, body=body_data)
 
         return resp_data
