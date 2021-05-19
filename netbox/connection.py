@@ -82,7 +82,7 @@ class NetboxConnection(object):
 
         if kwargs:
             url = '{}{}?{}&limit={}'.format(self.base_url, param,
-                                            '&'.join('{}={}'.format(key, urllib.parse.quote(val)) for key, val in kwargs.items()), limit)
+                                            '&'.join('{}={}'.format(key, urllib.parse.quote(str(val))) for key, val in kwargs.items()), limit)
         elif key:
             if '_choices' in param:
                 url = '{}{}{}/?limit={}'.format(self.base_url, param, key, limit)
