@@ -6,6 +6,21 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
+    def get_device_bays(self):
+        """Return the device bays"""
+        return self.netbox_con.get('/dcim/device-bays/')
+
+    def create_device_bay(self, name, device_id, installed_device_id=None, **kwargs):
+        """Create a new device bay
+        :param name: Device bay name
+        :param device_id: Device id that thi bay is installed in
+        :param installed_device_id: Device id possbily installed in this bay
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {"name": name, "device": {"id": device_id}, "installed_device": {"id": installed_device_id} if installed_device_id else None }
+        return self.netbox_con.post('/dcim/device-bays/', required_fields, **kwargs)
+
     def get_choices(self, choice_id=None):
         """Return choices for all fields if choice_id is not defined
 
