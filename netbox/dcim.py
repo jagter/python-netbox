@@ -13,7 +13,7 @@ class Dcim(object):
     def create_device_bay(self, name, device_id, installed_device_id=None, **kwargs):
         """Create a new device bay
         :param name: Device bay name
-        :param device_id: Device id that thi bay is installed in
+        :param device_id: Device id that this bay is installed in
         :param installed_device_id: Device id possbily installed in this bay
         :param kwargs: optional fields
         :return: netbox object if successful otherwise exception raised
