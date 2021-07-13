@@ -58,19 +58,18 @@ class Circuits(object):
             raise exceptions.NotFoundException({"detail": "Circuit with circuit: {} and provider: {}".format(cid, provider)}) from None
         return self.netbox_con.delete('/circuits/circuits/', circuits_id)
 
-    def update_circuit(self, cid, provider, **kwargs):
+    def update_circuit(self, cid, **kwargs):
         """Update circuit
 
         :param cid: circuit
-        :param provider: provider name
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
         try:
-            circuits_id = self.get_circuits(cid=cid, provider=provider)[0]['id']
+            circuit_id = self.get_circuits(cid=cid)[0]['id']
         except IndexError:
-            raise exceptions.NotFoundException({"detail": "Circuit with circuit: {} and provider {}".format(cid, provider)}) from None
-        return self.netbox_con.patch('/circuits/circuits/', circuits_id, **kwargs)
+            raise exceptions.NotFoundException({"detail": "Circuit with circuit: {}".format(cid)}) from None
+        return self.netbox_con.patch('/circuits/circuits/', circuit_id, **kwargs)
 
     def get_providers(self, **kwargs):
         """Returns circuit providers"""
