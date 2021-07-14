@@ -6,8 +6,6 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
-<<<<<<< Updated upstream
-=======
     def get_device_bays(self):
         """Return the device bays"""
         return self.netbox_con.get('/dcim/device-bays/')
@@ -45,7 +43,6 @@ class Dcim(object):
         required_fields = {"name": name, "device": {"id": device_id} }
         return self.netbox_con.delete('/dcim/device-bays/', required_fields)
 
->>>>>>> Stashed changes
     def get_choices(self, choice_id=None):
         """Return choices for all fields if choice_id is not defined
 
