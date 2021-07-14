@@ -6,6 +6,46 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
+<<<<<<< Updated upstream
+=======
+    def get_device_bays(self):
+        """Return the device bays"""
+        return self.netbox_con.get('/dcim/device-bays/')
+
+    def create_device_bay(self, name, device_id, installed_device_id=None, **kwargs):
+        """Create a new device bay
+        :param name: Device bay name
+        :param device_id: Device id that this bay is installed in
+        :param installed_device_id: Device id possbily installed in this bay
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {"name": name, "device": {"id": device_id}, "installed_device": {"id": installed_device_id} if installed_device_id else None }
+        return self.netbox_con.post('/dcim/device-bays/', required_fields, **kwargs)
+
+     def update_device_bay(self, name, device_id, installed_device_id=None, **kwargs):
+        """Update device bay
+
+        :param name: Device bay name
+        :param device_id: Device id that this bay is installed in
+        :param installed_device_id: Device id possbily installed in this bay
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        required_fields = {"name": name, "device": {"id": device_id}, "installed_device": {"id": installed_device_id} if installed_device_id else None }
+        return self.netbox_con.patch('/dcim/device-bays/', required_fields, **kwargs)
+
+    def delete_device_bay(self, name, device_id):
+        """Delete device bay
+
+        :param name: Device bay name
+        :param device_id: Device id that this bay is installed in
+        :return: bool True if succesful otherwise raise exception
+        """
+        required_fields = {"name": name, "device": {"id": device_id} }
+        return self.netbox_con.delete('/dcim/device-bays/', required_fields)
+
+>>>>>>> Stashed changes
     def get_choices(self, choice_id=None):
         """Return choices for all fields if choice_id is not defined
 
