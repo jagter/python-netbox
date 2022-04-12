@@ -93,7 +93,7 @@ class NetboxConnection(object):
 
         resp_data = self.__request('GET', params=param, key=key, url=url)
 
-        return resp_data['results']
+        return resp_data
 
     def put(self, params):
 
