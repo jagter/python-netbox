@@ -634,36 +634,6 @@ class Dcim(object):
         """
         return self.netbox_con.get('/dcim/interface-connections/', **kwargs)
 
-    def create_interface_connection(self, termination_a_id, termination_b_id, termination_a_type, termination_b_type, **kwargs):
-        """Create a new interface-connection
-
-        :param termination_a_id: id of the source interface
-        :param termination_a_type: type of source interface ("dcim.consoleport", "dcim.consoleserverport", "dcim.interface")
-        :param termination_b_id: id of the destination interface
-        :param termination_b_type: type of destination interface ("dcim.consoleport", "dcim.consoleserverport", "dcim.interface")
-        :param kwargs:
-        :return:
-        """
-        required_fields = {"termination_a_id": termination_a_id, "termination_a_type": termination_a_type, "termination_b_id": termination_b_id, "termination_b_type": termination_b_type}
-        return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
-
-    def delete_interface_connection(self, interface_connection_id):
-        """Delete interface-connection by id
-
-        :param interface_connection_id: id of interface-connection to remove
-        :return: bool True if successful otherwise raise DeleteException
-        """
-        return self.netbox_con.delete('/dcim/cables/', interface_connection_id)
-
-    def update_interface_connection(self, interface_connection_id, **kwargs):
-        """Update interface connection
-
-        :param interface_connection_id: interface_connection to update
-        :param kwargs: requests body dict
-        :return: bool True if successful otherwise raise UpdateException
-        """
-        return self.netbox_con.patch('/dcim/cables/', interface_connection_id, **kwargs)
-
     def get_interface_templates(self, **kwargs):
         """Return interface templates"""
         return self.netbox_con.get('/dcim/interface-templates', **kwargs)
