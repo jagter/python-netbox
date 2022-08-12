@@ -16,6 +16,18 @@ class Tenancy(object):
     def get_tenants(self, **kwargs):
         """Returns the tenants"""
         return self.netbox_con.get('/tenancy/tenants/', **kwargs)
+    
+    def get_contacts(self, **kwargs):
+        """Returns the contacts"""
+        return self.netbox_con.get('/tenancy/contacts/', **kwargs)
+    
+    def get_contact_assignments(self, **kwargs):
+        """Returns the contacts"""
+        return self.netbox_con.get('/tenancy/contact-assignments/', **kwargs)
+    
+    def get_contact_roles(self, **kwargs):
+        """Returns the roles for contacts"""
+        return self.netbox_con.get('/tenancy/contact-roles/', **kwargs)
 
     def create_tenant(self, name, slug, **kwargs):
         """Create a new tenant
@@ -27,6 +39,32 @@ class Tenancy(object):
         """
         required_fields = {"name": name, "slug": slug}
         return self.netbox_con.post('/tenancy/tenants/', required_fields, **kwargs)
+    
+    def create_contact(self, name: str, **kwargs):
+        """Create a new contact
+
+        :param name: Contact name
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {"name": name}
+        return self.netbox_con.post('/tenancy/contacts/', required_fields, **kwargs)
+    
+    def create_contact_assignment_tenant(self, contact_id: int, tenant_id: int, role_id: int, **kwargs):
+        """Connect a contect to a tenant
+
+        :param contact_display_name: Contact display name
+        :param tenant_id: The ID of the tenant
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "content_type": "tenancy.tenant",
+            "object_id": tenant_id,
+            "contact": contact_id,
+            "role": role_id
+        }
+        return self.netbox_con.post('/tenancy/contact-assignments/', required_fields, **kwargs)
 
     def delete_tenant(self, tenant_name):
         """Delete tenant
