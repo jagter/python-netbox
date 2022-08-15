@@ -811,3 +811,21 @@ class Dcim(object):
     def get_front_ports(self, **kwargs):
         """Return front ports"""
         return self.netbox_con.get('/dcim/front-ports/', **kwargs)
+    
+    def create_cable(self, termination_a_type, termination_a_id, termination_b_type, termination_b_id, **kwargs):
+        """Create a new front port for a device
+
+        :param termination_a_type: the type for the first termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_a_id: the id for the first termination
+        :param termination_b_type: the type for the second termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_b_id: the id for the second termination
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "termination_a_type": termination_a_type,
+            "termination_a_id": termination_a_id,
+            "termination_b_type": termination_b_type,
+            "termination_b_id": termination_b_id
+        }
+        return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
