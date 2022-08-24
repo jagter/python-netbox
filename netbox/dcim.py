@@ -823,9 +823,17 @@ class Dcim(object):
         :return: netbox object if successful otherwise exception raised
         """
         required_fields = {
-            "termination_a_type": termination_a_type,
-            "termination_a_id": termination_a_id,
-            "termination_b_type": termination_b_type,
-            "termination_b_id": termination_b_id
+            "a_terminations": [
+                {
+                    "object_type": termination_a_type,
+                    "object_id": termination_a_id
+                }
+            ],
+            "b_terminations": [
+                {
+                    "object_type": termination_b_type,
+                    "object_id": termination_b_id
+                }
+            ],
         }
         return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
