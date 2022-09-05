@@ -769,3 +769,135 @@ class Dcim(object):
     def get_power_connections(self, **kwargs):
         """Return power connections """
         return self.netbox_con.get('/dcim/power-connections/', **kwargs)
+
+    def create_rear_port(self, name, device_id, type, **kwargs):
+        """Create a new rear port for a device
+
+        :param name: rear port name
+        :param device_id: device id for the device
+        :param type: the type for the rear port (for instance: 8p8c)
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "name": name,
+            "device": device_id,
+            "type": type
+        }
+        return self.netbox_con.post('/dcim/rear-ports/', required_fields, **kwargs)
+    
+    def get_rear_ports(self, **kwargs):
+        """Return rear ports"""
+        return self.netbox_con.get('/dcim/rear-ports/', **kwargs)
+    
+    def update_rear_port(self, rear_port_id, **kwargs):
+        """Update rear port
+
+        :param rear_port_id: Rear port ID to delete
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/rear-ports/', rear_port_id, **kwargs)
+    
+    def update_rear_port(self, rear_port_id, **kwargs):
+        """Update rear port
+
+        :param rear_port_id: Rear port ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/rear-ports/', rear_port_id, **kwargs)
+    
+    def delete_rear_port(self, rear_port_id):
+        """Delete rear port
+
+        :param rear_port_id: Rear port ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/rear-ports/', rear_port_id)
+    
+    def create_front_port(self, name, device_id, type, rear_port_id, **kwargs):
+        """Create a new front port for a device
+
+        :param name: rear port name
+        :param device_id: device id for the device
+        :param type: the type for the rear port (for instance: 8p8c)
+        :param rear_port_id: the id for the connected rear port
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "name": name,
+            "device": device_id,
+            "rear_port": rear_port_id,
+            "type": type
+        }
+        return self.netbox_con.post('/dcim/front-ports/', required_fields, **kwargs)
+    
+    def get_front_ports(self, **kwargs):
+        """Return front ports"""
+        return self.netbox_con.get('/dcim/front-ports/', **kwargs)
+    
+    def update_front_port(self, front_port_id, **kwargs):
+        """Update front port
+
+        :param front_port_id: Front port ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/front-ports/', front_port_id, **kwargs)
+    
+    def delete_front_port(self, front_port_id):
+        """Delete front port
+
+        :param front_port_id: Front port ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/front-ports/', front_port_id)
+    
+    def create_cable(self, termination_a_type, termination_a_id, termination_b_type, termination_b_id, **kwargs):
+        """Create a new front port for a device
+
+        :param termination_a_type: the type for the first termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_a_id: the id for the first termination
+        :param termination_b_type: the type for the second termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_b_id: the id for the second termination
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "a_terminations": [
+                {
+                    "object_type": termination_a_type,
+                    "object_id": termination_a_id
+                }
+            ],
+            "b_terminations": [
+                {
+                    "object_type": termination_b_type,
+                    "object_id": termination_b_id
+                }
+            ],
+        }
+        return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
+    
+    def get_cables(self, **kwargs):
+        """Return cables"""
+        return self.netbox_con.get('/dcim/cables/', **kwargs)
+    
+    def update_cable(self, cable_id, **kwargs):
+        """Update cable
+
+        :param cable_id: Cable ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/cable/', cable_id, **kwargs)
+    
+    def delete_cable(self, cable_id):
+        """Delete cable
+
+        :param cable_id: Cable ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/cables/', cable_id)
