@@ -790,7 +790,7 @@ class Dcim(object):
         """Return rear ports"""
         return self.netbox_con.get('/dcim/rear-ports/', **kwargs)
     
-    def update_rear_ports(self, rear_port_id, **kwargs):
+    def update_rear_port(self, rear_port_id, **kwargs):
         """Update rear port
 
         :param rear_port_id: Rear port ID to delete
@@ -799,7 +799,7 @@ class Dcim(object):
         """
         return self.netbox_con.patch('/dcim/rear-ports/', rear_port_id, **kwargs)
     
-    def update_rear_ports(self, rear_port_id, **kwargs):
+    def update_rear_port(self, rear_port_id, **kwargs):
         """Update rear port
 
         :param rear_port_id: Rear port ID to update
@@ -837,6 +837,23 @@ class Dcim(object):
     def get_front_ports(self, **kwargs):
         """Return front ports"""
         return self.netbox_con.get('/dcim/front-ports/', **kwargs)
+    
+    def update_front_port(self, front_port_id, **kwargs):
+        """Update front port
+
+        :param front_port_id: Front port ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/front-ports/', front_port_id, **kwargs)
+    
+    def delete_front_port(self, front_port_id):
+        """Delete front port
+
+        :param front_port_id: Front port ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/front-ports/', front_port_id)
     
     def create_cable(self, termination_a_type, termination_a_id, termination_b_type, termination_b_id, **kwargs):
         """Create a new front port for a device
