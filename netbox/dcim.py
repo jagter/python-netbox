@@ -790,6 +790,32 @@ class Dcim(object):
         """Return rear ports"""
         return self.netbox_con.get('/dcim/rear-ports/', **kwargs)
     
+    def update_rear_ports(self, rear_port_id, **kwargs):
+        """Update rear port
+
+        :param rear_port_id: Rear port ID to delete
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/rear-ports/', rear_port_id, **kwargs)
+    
+    def update_rear_ports(self, rear_port_id, **kwargs):
+        """Update rear port
+
+        :param rear_port_id: Rear port ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/rear-ports/', rear_port_id, **kwargs)
+    
+    def delete_rear_port(self, rear_port_id):
+        """Delete rear port
+
+        :param rear_port_id: Rear port ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/rear-ports/', rear_port_id)
+    
     def create_front_port(self, name, device_id, type, rear_port_id, **kwargs):
         """Create a new front port for a device
 
