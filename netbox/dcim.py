@@ -769,3 +769,44 @@ class Dcim(object):
     def get_power_connections(self, **kwargs):
         """Return power connections """
         return self.netbox_con.get('/dcim/power-connections/', **kwargs)
+
+    def create_location(self, name, slug, site_name, **kwargs):
+        """Create a location
+
+        :param name: Location name
+        :param slug: Slug for the location
+        :param site_name: Name of the site to connect the location to
+        :param kwargs: Extra location parameters
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        try:
+            site_id = self.get_sites(name=site_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException({"detail": "site: {}".format(site_name)}) from None
+        required_fields = {"name": name, "slug": slug, "site": site_id}
+        return self.netbox_con.post('/dcim/locations/', required_fields, **kwargs)
+    
+    def get_locations(self, **kwargs):
+        """Return locations"""
+        return self.netbox_con.get('/dcim/locations/', **kwargs)
+
+    def update_location(self, location_id, **kwargs):
+        """Update location
+
+        :param location: location item to update
+        :param kwargs: Extra location items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/locations/', location_id, **kwargs)
+
+    def delete_location(self, location_name):
+        """Delete location
+
+        :param location_name: Name of location to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            location_id = self.get_locations(name=location_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException({"detail": "location: {}".format(location_name)}) from None
+        return self.netbox_con.delete('/dcim/locations/', location_id)
