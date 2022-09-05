@@ -880,3 +880,24 @@ class Dcim(object):
             ],
         }
         return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
+    
+    def get_cables(self, **kwargs):
+        """Return cables"""
+        return self.netbox_con.get('/dcim/cables/', **kwargs)
+    
+    def update_cable(self, cable_id, **kwargs):
+        """Update cable
+
+        :param cable_id: Cable ID to update
+        :param kwargs: Items to update
+        :return bool True if successful otherwise raise Exception
+        """
+        return self.netbox_con.patch('/dcim/cable/', cable_id, **kwargs)
+    
+    def delete_cable(self, cable_id):
+        """Delete cable
+
+        :param cable_id: Cable ID to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/cables/', cable_id)
