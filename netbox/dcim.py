@@ -769,3 +769,71 @@ class Dcim(object):
     def get_power_connections(self, **kwargs):
         """Return power connections """
         return self.netbox_con.get('/dcim/power-connections/', **kwargs)
+
+    def create_rear_port(self, name, device_id, type, **kwargs):
+        """Create a new rear port for a device
+
+        :param name: rear port name
+        :param device_id: device id for the device
+        :param type: the type for the rear port (for instance: 8p8c)
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "name": name,
+            "device": device_id,
+            "type": type
+        }
+        return self.netbox_con.post('/dcim/rear-ports/', required_fields, **kwargs)
+    
+    def get_rear_ports(self, **kwargs):
+        """Return rear ports"""
+        return self.netbox_con.get('/dcim/rear-ports/', **kwargs)
+    
+    def create_front_port(self, name, device_id, type, rear_port_id, **kwargs):
+        """Create a new front port for a device
+
+        :param name: rear port name
+        :param device_id: device id for the device
+        :param type: the type for the rear port (for instance: 8p8c)
+        :param rear_port_id: the id for the connected rear port
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "name": name,
+            "device": device_id,
+            "rear_port": rear_port_id,
+            "type": type
+        }
+        return self.netbox_con.post('/dcim/front-ports/', required_fields, **kwargs)
+    
+    def get_front_ports(self, **kwargs):
+        """Return front ports"""
+        return self.netbox_con.get('/dcim/front-ports/', **kwargs)
+    
+    def create_cable(self, termination_a_type, termination_a_id, termination_b_type, termination_b_id, **kwargs):
+        """Create a new front port for a device
+
+        :param termination_a_type: the type for the first termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_a_id: the id for the first termination
+        :param termination_b_type: the type for the second termination (dcim.interface, dcim.frontport, etc.)
+        :param termination_b_id: the id for the second termination
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {
+            "a_terminations": [
+                {
+                    "object_type": termination_a_type,
+                    "object_id": termination_a_id
+                }
+            ],
+            "b_terminations": [
+                {
+                    "object_type": termination_b_type,
+                    "object_id": termination_b_id
+                }
+            ],
+        }
+        return self.netbox_con.post('/dcim/cables/', required_fields, **kwargs)
