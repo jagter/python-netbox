@@ -71,7 +71,7 @@ class NetboxConnection(object):
         if response.status_code == 204:
             return response.content
 
-        if(method == "GET" and "export" in params):
+        if(method == "GET" and "&export=" in url):
             # return raw result if export template is specified
             return {"results": response.text}
 
