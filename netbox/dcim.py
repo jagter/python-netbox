@@ -271,8 +271,8 @@ class Dcim(object):
         :param kwargs: requests body dict
         :return: bool True if successful otherwise raise UpdateException
         """
-        device_id = self.get_virtual_chassis(name=virtual_chassis_name)[0]['id']
-        return self.netbox_con.patch('/dcim/virtual-chassis/', device_id, **kwargs)
+        virtual_chassis_id = self.get_virtual_chassis(name=virtual_chassis_name)[0]['id']
+        return self.netbox_con.patch('/dcim/virtual-chassis/', virtual_chassis_id, **kwargs)
     
     def delete_virtual_chassis(self, virtual_chassis_name):
         """Delete virtual chassis by virtual chassis name name
