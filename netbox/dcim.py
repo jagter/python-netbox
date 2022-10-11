@@ -250,6 +250,42 @@ class Dcim(object):
         """
         return self.netbox_con.patch('/dcim/rack-groups/', rack_group_id, **kwargs)
 
+    def create_virtual_chassis(self, name, **kwargs):
+        """Create a new virtual chassis
+
+        :param name: Name of the virtual chassis
+        :param kwargs: Optional arguments
+        :return: netbox object if successful otherwise raise CreateException
+        """
+        required_fields = {"name": name}
+        return self.netbox_con.post('/dcim/virtual-chassis/', required_fields, **kwargs)
+
+    def get_virtual_chassis(self, **kwargs):
+        """Get all virtual chassis"""
+        return self.netbox_con.get('/dcim/virtual-chassis/', **kwargs)
+    
+    def update_virtual_chassis(self, virtual_chassis_name, **kwargs):
+        """Update virtual chassis by virtual chassis name
+
+        :param virtual_chassis_name: virtual chassis name to update
+        :param kwargs: requests body dict
+        :return: bool True if successful otherwise raise UpdateException
+        """
+        virtual_chassis_id = self.get_virtual_chassis(name=virtual_chassis_name)[0]['id']
+        return self.netbox_con.patch('/dcim/virtual-chassis/', virtual_chassis_id, **kwargs)
+    
+    def delete_virtual_chassis(self, virtual_chassis_name):
+        """Delete virtual chassis by virtual chassis name name
+
+        :param virtual_chassis_name: Virtual chassis to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        try:
+            device_id = self.get_virtual_chassis(name=virtual_chassis_name)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException({"detail": "device: {}".format(virtual_chassis_name)}) from None
+        return self.netbox_con.delete('/dcim/virtual-chassis/', device_id)
+
     def get_devices(self, **kwargs):
         """Get all devices"""
         return self.netbox_con.get('/dcim/devices/', **kwargs)
