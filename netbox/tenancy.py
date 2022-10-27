@@ -70,7 +70,7 @@ class Tenancy(object):
         """Delete tenant
 
         :param tenant_name: Tenant to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             tenant_id = self.get_tenants(name=tenant_name)[0]['id']
@@ -82,7 +82,7 @@ class Tenancy(object):
         """Delete tenant
 
         :param tenant_id: Tenant to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/tenancy/tenants/', tenant_id)
 
@@ -127,7 +127,7 @@ class Tenancy(object):
         """Delete tenant
 
         :param tenant_group_name: Tenant group to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             tenant_group_id = self.get_tenant_groups(name=tenant_group_name)[0]['id']
@@ -139,7 +139,7 @@ class Tenancy(object):
         """Delete tenant
 
         :param tenant_group_id: Tenant group to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/tenancy/tenant-groups/', tenant_group_id)
 

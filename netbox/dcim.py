@@ -89,7 +89,7 @@ class Dcim(object):
         """Delete site
 
         :param site_name: Site to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             site_id = self.get_sites(name=site_name)[0]['id']
@@ -101,7 +101,7 @@ class Dcim(object):
         """Delete site
 
         :param site_id: Site to delete
-        :return: bool True if succesful otherwase raise exception
+        :return: bool True if succesful otherwise raise exception
         """
         return self.netbox_con.delete('/dcim/sites/', site_id)
 

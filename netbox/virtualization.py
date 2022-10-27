@@ -37,7 +37,7 @@ class Virtualization(object):
         """Delete a cluster
 
         :param name: name of the cluster to delete
-        :return: netbox object if succesful otherwase delete exception
+        :return: netbox object if succesful otherwise delete exception
         """
         try:
             cluster_id = self.get_clusters(name=name)[0]['id']
@@ -49,7 +49,7 @@ class Virtualization(object):
         """Delete a cluster
 
         :param cluster_id: cluster to delete
-        :return: netbox object if succesful otherwase delete exception
+        :return: netbox object if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/virtualization/clusters/', cluster_id)
 
@@ -115,7 +115,7 @@ class Virtualization(object):
         """Delete a cluster type
 
         :param name: name of the cluster type to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             cluster_type_id = self.get_cluster_types(name=name)[0]['id']
@@ -127,7 +127,7 @@ class Virtualization(object):
         """Delete a cluster type
 
         :param cluster_type_id: cluster type to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/virtualization/cluster-types/', cluster_type_id)
 
