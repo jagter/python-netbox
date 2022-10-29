@@ -25,7 +25,7 @@ class Extras(object):
         """Delete config-context
 
         :param name: Name of the config-context to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             config_context_id = self.get_config_contexts(name=name)[0]['id']
@@ -37,7 +37,7 @@ class Extras(object):
         """Delete config-context
 
         :param config_context_id: config-context to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/extras/config-contexts/', config_context_id)
 
@@ -83,7 +83,7 @@ class Extras(object):
         """Delete tag
 
         :param name: Name of the tag to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             tag_id = self.get_tags(name=name)[0]['id']
@@ -95,7 +95,7 @@ class Extras(object):
         """Delete tag
 
         :param tag_id: tag to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         return self.netbox_con.delete('/extras/tags/', tag_id)
 

@@ -128,7 +128,7 @@ class Circuits(object):
         """Delete circuit type
 
         :param type_name: circuit type to delete
-        :return: bool True if succesful otherwase delete exception
+        :return: bool True if succesful otherwise delete exception
         """
         try:
             circuits_type_id = self.get_types(name=type_name)[0]['id']
