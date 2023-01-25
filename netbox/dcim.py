@@ -131,6 +131,10 @@ class Dcim(object):
         """Returns all available racks"""
         return self.netbox_con.get('/dcim/racks/', **kwargs)
 
+    def get_rack_elevation(self, id, **kwargs):
+        """Returns an elevation of a specific rack"""
+        return self.netbox_con.get('/dcim/racks/{}/elevation'.format(id), **kwargs)
+
     def create_rack(self, name, site_name, **kwargs):
         """Create new rack
 
