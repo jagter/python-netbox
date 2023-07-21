@@ -6,6 +6,66 @@ class Dcim(object):
     def __init__(self, netbox_con):
         self.netbox_con = netbox_con
 
+    def get_device_bays(self, **kwargs):
+        """Return the device bays"""
+        return self.netbox_con.get('/dcim/device-bays/', **kwargs)
+
+    def create_device_bay(self, name, device_id, installed_device_id=None, **kwargs):
+        """Create a new device bay
+        :param name: Name of the device bay
+        :param device_id: Device id that this bay is installed in
+        :param installed_device_id: Device id possbily installed in this bay
+        :param kwargs: optional fields
+        :return: netbox object if successful otherwise exception raised
+        """
+        required_fields = {"name": name, "device": {"id": device_id}, "installed_device": {"id": installed_device_id} if installed_device_id else None }
+        return self.netbox_con.post('/dcim/device-bays/', required_fields, **kwargs)
+
+    def update_device_bay(self, name, device, **kwargs):
+        """Update device bay
+
+        :param name: Name of the device bay
+        :param device: Name of the device the device bay is installed in
+        :param kwargs: optional fields
+        :return: bool True if succesful otherwise raise exception
+        """
+        try:
+            bay_id = self.get_device_bays(name=name, device=device)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException({"detail": "device-bay: {}".format(name)}) from None
+        return self.netbox_con.patch('/dcim/device-bays/', bay_id, **kwargs)
+
+    def update_device_bay_by_id(self, bay_id, **kwargs):
+        """Update device bay
+
+        :param bay_id: Id of the device bay
+        :param kwargs: optional fields
+        :return: bool True if succesful otherwise raise exception
+        """
+        return self.netbox_con.patch('/dcim/device-bays/', bay_id, **kwargs)
+
+    def delete_device_bay(self, name, device):
+        """Delete device bay
+
+        :param name: Name of the device bay
+        :param device: Name of the device the device bay is installed in
+        :return: bool True if succesful otherwise raise exception
+        """
+        try:
+            bay_id = self.get_device_bays(name=name, device=device)[0]['id']
+        except IndexError:
+            raise exceptions.NotFoundException({"detail": "device-bay: {}".format(name)}) from None
+
+        return self.netbox_con.delete('/dcim/device-bays/', bay_id)
+
+    def delete_device_bay_by_id(self, bay_id):
+        """Delete device bay by its id
+
+        :param bay_id: Id of the Device bay to delete
+        :return: bool True if successful otherwise raise DeleteException
+        """
+        return self.netbox_con.delete('/dcim/device-bays/', bay_id)
+
     def get_choices(self, choice_id=None):
         """Return choices for all fields if choice_id is not defined
 
